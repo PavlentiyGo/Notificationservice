@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package subscription;
+
+option go_package = "github.com/PavlentiyGo/notification-service/proto/subscription";
+
+import "google/protobuf/timestamp.proto";
+
+service SubscriptionService {
+
+}
+
+message CreateSubscriptionRequest{
+  int64 user_id = 1;
+  int32 price = 2;
+  Currency currency = 3;
+  string name = 4;
+  SubscriptionType type = 5;
+  google.protobuf.Timestamp billing_at = 6;
+}
+
+enum Currency{
+  CURRENCY_UNSPECIFIED = 0;
+
+  CURRENCY_RUB = 1;
+  CURRENCY_EUR = 2;
+  CURRENCY_USD = 3;
+}
+enum SubscriptionType {
+  SUBSCRIPTION_CATEGORY_UNSPECIFIED = 0;
+
+  SUBSCRIPTION_CATEGORY_STREAMING = 1;   // Нетфликс, Яндекс Плюс, Спотифай
+  SUBSCRIPTION_CATEGORY_SOFTWARE = 2;    // JetBrains, ChatGPT Plus, Облако
+  SUBSCRIPTION_CATEGORY_UTILITIES = 3;   // ЖКХ, интернет, мобильная связь
+  SUBSCRIPTION_CATEGORY_FINANCE = 4;     // Кредиты, страховки, банковское обслуживание
+  SUBSCRIPTION_CATEGORY_HEALTH = 5;      // Фитнес-клуб, доставка здоровой еды, витамины
+  SUBSCRIPTION_CATEGORY_EDUCATION = 6;   // Курсы, онлайн-школы, подписки на книги
+  SUBSCRIPTION_CATEGORY_OTHER = 7;       // Всё остальное
+}
+
+
+message CreateSubscriptionResponse{
+  int32 subscription_id = 1;
+
+  int32 price = 2;
+  Currency currency = 3;
+  string name = 4;
+  SubscriptionType type = 5;
+  google.protobuf.Timestamp billing_at = 6;
+}
+
+message GetSubscriptionsRequest{
+}
+
+message GetSubscriptionsResponse{
+  repeated CreateSubscriptionResponse subscriptions = 1;
+}
+
+message DeleteSubscriptionRequest{
+  int32 subscription_id = 1;
+}
+message DeleteSubscriptionResponse{
+}
+
+message ChangeTotalCurrencyRequest{
+  Currency currency = 1;
+}
+message ChangeTotalCurrencyResponse{
+  Currency currency = 1;
+}
+
+message GetStatisticRequest{
+  Currency total_currency = 1;
+  int64 user_id = 2;
+
+  google.protobuf.Timestamp since = 3;
+  google.protobuf.Timestamp to = 4;
+}
+message GetStatisticResponse{
+  int64 total = 1;
+}

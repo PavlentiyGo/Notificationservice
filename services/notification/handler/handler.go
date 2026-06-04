@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	pb "github.com/PavlentiyGo/notification-service/proto"
+	"github.com/PavlentiyGo/notification-service/proto/notification"
 )
 
 type NotificationHandler struct {
-	pb.UnimplementedNotificationServiceServer
+	notification.UnimplementedNotificationServiceServer
 }
 
 func NewNotificationHandler() *NotificationHandler {
@@ -16,10 +16,10 @@ func NewNotificationHandler() *NotificationHandler {
 }
 func (h *NotificationHandler) CreateNotification(
 	ctx context.Context,
-	req *pb.CreateNotificationRequest,
-) (*pb.CreateNotificationResponse, error) {
+	req *notification.CreateNotificationRequest,
+) (*notification.CreateNotificationResponse, error) {
 
 	fmt.Println(req.ChatId, req.Text)
 
-	return &pb.CreateNotificationResponse{Created: false}, nil
+	return &notification.CreateNotificationResponse{Created: false}, nil
 }

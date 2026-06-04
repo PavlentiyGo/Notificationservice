@@ -7,16 +7,28 @@ option go_package = "github.com/PavlentiyGo/notification-service/proto/subscript
 import "google/protobuf/timestamp.proto";
 
 service SubscriptionService {
+  rpc CreateSubscription(CreateSubscriptionRequest) returns (CreateSubscriptionResponse);
+  rpc GetSubscriptions(GetSubscriptionsRequest) returns (GetSubscriptionsResponse);
+  
+
 
 }
 
 message CreateSubscriptionRequest{
-  int64 user_id = 1;
+  User user = 1;
+
   int32 price = 2;
   Currency currency = 3;
   string name = 4;
   SubscriptionType type = 5;
   google.protobuf.Timestamp billing_at = 6;
+}
+
+message User {
+  int32 id = 1;
+  string user_name = 2;
+  string first_name = 3;
+  string second_name = 4;
 }
 
 enum Currency{
@@ -37,8 +49,6 @@ enum SubscriptionType {
   SUBSCRIPTION_CATEGORY_EDUCATION = 6;   // Курсы, онлайн-школы, подписки на книги
   SUBSCRIPTION_CATEGORY_OTHER = 7;       // Всё остальное
 }
-
-
 message CreateSubscriptionResponse{
   int32 subscription_id = 1;
 
@@ -50,6 +60,7 @@ message CreateSubscriptionResponse{
 }
 
 message GetSubscriptionsRequest{
+  int32 user_id = 1;
 }
 
 message GetSubscriptionsResponse{
@@ -59,8 +70,10 @@ message GetSubscriptionsResponse{
 message DeleteSubscriptionRequest{
   int32 subscription_id = 1;
 }
+
 message DeleteSubscriptionResponse{
 }
+
 
 message ChangeTotalCurrencyRequest{
   Currency currency = 1;
@@ -71,11 +84,11 @@ message ChangeTotalCurrencyResponse{
 
 message GetStatisticRequest{
   Currency total_currency = 1;
-  int64 user_id = 2;
+  int32 user_id = 2;
 
   google.protobuf.Timestamp since = 3;
   google.protobuf.Timestamp to = 4;
 }
 message GetStatisticResponse{
-  int64 total = 1;
+  int32 total = 1;
 }

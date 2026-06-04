@@ -1,0 +1,30 @@
+package service
+
+import (
+	"context"
+
+	"github.com/PavlentiyGo/notification-service/services/subscription/internal/domain"
+	"github.com/PavlentiyGo/notification-service/services/subscription/internal/repository"
+)
+
+type SubscriptionService struct {
+	repo *repository.SubscriptionRepository
+}
+
+func NewSubscriptionService(
+	subRepo *repository.SubscriptionRepository,
+) *SubscriptionService {
+	return &SubscriptionService{
+		repo: subRepo,
+	}
+}
+
+func (s *SubscriptionService) CreateSubscription(
+	ctx context.Context,
+	subscription domain.Subscription,
+) (domain.Subscription, error) {
+
+}
+func (s *SubscriptionService) GetSubscription() {
+
+}

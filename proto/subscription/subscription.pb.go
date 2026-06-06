@@ -27,24 +27,24 @@ type Currency int32
 
 const (
 	Currency_CURRENCY_UNSPECIFIED Currency = 0
-	Currency_CURRENCY_RUB         Currency = 1
-	Currency_CURRENCY_EUR         Currency = 2
-	Currency_CURRENCY_USD         Currency = 3
+	Currency_RUB                  Currency = 1
+	Currency_EUR                  Currency = 2
+	Currency_USD                  Currency = 3
 )
 
 // Enum value maps for Currency.
 var (
 	Currency_name = map[int32]string{
 		0: "CURRENCY_UNSPECIFIED",
-		1: "CURRENCY_RUB",
-		2: "CURRENCY_EUR",
-		3: "CURRENCY_USD",
+		1: "RUB",
+		2: "EUR",
+		3: "USD",
 	}
 	Currency_value = map[string]int32{
 		"CURRENCY_UNSPECIFIED": 0,
-		"CURRENCY_RUB":         1,
-		"CURRENCY_EUR":         2,
-		"CURRENCY_USD":         3,
+		"RUB":                  1,
+		"EUR":                  2,
+		"USD":                  3,
 	}
 )
 
@@ -78,37 +78,37 @@ func (Currency) EnumDescriptor() ([]byte, []int) {
 type SubscriptionType int32
 
 const (
-	SubscriptionType_SUBSCRIPTION_CATEGORY_UNSPECIFIED SubscriptionType = 0
-	SubscriptionType_SUBSCRIPTION_CATEGORY_STREAMING   SubscriptionType = 1 // Нетфликс, Яндекс Плюс, Спотифай
-	SubscriptionType_SUBSCRIPTION_CATEGORY_SOFTWARE    SubscriptionType = 2 // JetBrains, ChatGPT Plus, Облако
-	SubscriptionType_SUBSCRIPTION_CATEGORY_UTILITIES   SubscriptionType = 3 // ЖКХ, интернет, мобильная связь
-	SubscriptionType_SUBSCRIPTION_CATEGORY_FINANCE     SubscriptionType = 4 // Кредиты, страховки, банковское обслуживание
-	SubscriptionType_SUBSCRIPTION_CATEGORY_HEALTH      SubscriptionType = 5 // Фитнес-клуб, доставка здоровой еды, витамины
-	SubscriptionType_SUBSCRIPTION_CATEGORY_EDUCATION   SubscriptionType = 6 // Курсы, онлайн-школы, подписки на книги
-	SubscriptionType_SUBSCRIPTION_CATEGORY_OTHER       SubscriptionType = 7 // Всё остальное
+	SubscriptionType_TYPE_UNSPECIFIED SubscriptionType = 0
+	SubscriptionType_STREAMING        SubscriptionType = 1 // Нетфликс, Яндекс Плюс, Спотифай
+	SubscriptionType_SOFTWARE         SubscriptionType = 2 // JetBrains, ChatGPT Plus, Облако
+	SubscriptionType_UTILITIES        SubscriptionType = 3 // ЖКХ, интернет, мобильная связь
+	SubscriptionType_FINANCE          SubscriptionType = 4 // Кредиты, страховки, банковское обслуживание
+	SubscriptionType_HEALTH           SubscriptionType = 5 // Фитнес-клуб, доставка здоровой еды, витамины
+	SubscriptionType_EDUCATION        SubscriptionType = 6 // Курсы, онлайн-школы, подписки на книги
+	SubscriptionType_OTHER            SubscriptionType = 7 // Всё остальное
 )
 
 // Enum value maps for SubscriptionType.
 var (
 	SubscriptionType_name = map[int32]string{
-		0: "SUBSCRIPTION_CATEGORY_UNSPECIFIED",
-		1: "SUBSCRIPTION_CATEGORY_STREAMING",
-		2: "SUBSCRIPTION_CATEGORY_SOFTWARE",
-		3: "SUBSCRIPTION_CATEGORY_UTILITIES",
-		4: "SUBSCRIPTION_CATEGORY_FINANCE",
-		5: "SUBSCRIPTION_CATEGORY_HEALTH",
-		6: "SUBSCRIPTION_CATEGORY_EDUCATION",
-		7: "SUBSCRIPTION_CATEGORY_OTHER",
+		0: "TYPE_UNSPECIFIED",
+		1: "STREAMING",
+		2: "SOFTWARE",
+		3: "UTILITIES",
+		4: "FINANCE",
+		5: "HEALTH",
+		6: "EDUCATION",
+		7: "OTHER",
 	}
 	SubscriptionType_value = map[string]int32{
-		"SUBSCRIPTION_CATEGORY_UNSPECIFIED": 0,
-		"SUBSCRIPTION_CATEGORY_STREAMING":   1,
-		"SUBSCRIPTION_CATEGORY_SOFTWARE":    2,
-		"SUBSCRIPTION_CATEGORY_UTILITIES":   3,
-		"SUBSCRIPTION_CATEGORY_FINANCE":     4,
-		"SUBSCRIPTION_CATEGORY_HEALTH":      5,
-		"SUBSCRIPTION_CATEGORY_EDUCATION":   6,
-		"SUBSCRIPTION_CATEGORY_OTHER":       7,
+		"TYPE_UNSPECIFIED": 0,
+		"STREAMING":        1,
+		"SOFTWARE":         2,
+		"UTILITIES":        3,
+		"FINANCE":          4,
+		"HEALTH":           5,
+		"EDUCATION":        6,
+		"OTHER":            7,
 	}
 )
 
@@ -213,7 +213,7 @@ func (x *CreateSubscriptionRequest) GetType() SubscriptionType {
 	if x != nil {
 		return x.Type
 	}
-	return SubscriptionType_SUBSCRIPTION_CATEGORY_UNSPECIFIED
+	return SubscriptionType_TYPE_UNSPECIFIED
 }
 
 func (x *CreateSubscriptionRequest) GetBillingAt() *timestamppb.Timestamp {
@@ -365,7 +365,7 @@ func (x *CreateSubscriptionResponse) GetType() SubscriptionType {
 	if x != nil {
 		return x.Type
 	}
-	return SubscriptionType_SUBSCRIPTION_CATEGORY_UNSPECIFIED
+	return SubscriptionType_TYPE_UNSPECIFIED
 }
 
 func (x *CreateSubscriptionResponse) GetBillingAt() *timestamppb.Timestamp {
@@ -788,21 +788,22 @@ const file_proto_subscription_subscription_proto_rawDesc = "" +
 	"\x05since\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\x05since\x12*\n" +
 	"\x02to\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\x02to\",\n" +
 	"\x14GetStatisticResponse\x12\x14\n" +
-	"\x05total\x18\x01 \x01(\x05R\x05total*Z\n" +
+	"\x05total\x18\x01 \x01(\x05R\x05total*?\n" +
 	"\bCurrency\x12\x18\n" +
-	"\x14CURRENCY_UNSPECIFIED\x10\x00\x12\x10\n" +
-	"\fCURRENCY_RUB\x10\x01\x12\x10\n" +
-	"\fCURRENCY_EUR\x10\x02\x12\x10\n" +
-	"\fCURRENCY_USD\x10\x03*\xb2\x02\n" +
-	"\x10SubscriptionType\x12%\n" +
-	"!SUBSCRIPTION_CATEGORY_UNSPECIFIED\x10\x00\x12#\n" +
-	"\x1fSUBSCRIPTION_CATEGORY_STREAMING\x10\x01\x12\"\n" +
-	"\x1eSUBSCRIPTION_CATEGORY_SOFTWARE\x10\x02\x12#\n" +
-	"\x1fSUBSCRIPTION_CATEGORY_UTILITIES\x10\x03\x12!\n" +
-	"\x1dSUBSCRIPTION_CATEGORY_FINANCE\x10\x04\x12 \n" +
-	"\x1cSUBSCRIPTION_CATEGORY_HEALTH\x10\x05\x12#\n" +
-	"\x1fSUBSCRIPTION_CATEGORY_EDUCATION\x10\x06\x12\x1f\n" +
-	"\x1bSUBSCRIPTION_CATEGORY_OTHER\x10\a2\xe1\x01\n" +
+	"\x14CURRENCY_UNSPECIFIED\x10\x00\x12\a\n" +
+	"\x03RUB\x10\x01\x12\a\n" +
+	"\x03EUR\x10\x02\x12\a\n" +
+	"\x03USD\x10\x03*\x87\x01\n" +
+	"\x10SubscriptionType\x12\x14\n" +
+	"\x10TYPE_UNSPECIFIED\x10\x00\x12\r\n" +
+	"\tSTREAMING\x10\x01\x12\f\n" +
+	"\bSOFTWARE\x10\x02\x12\r\n" +
+	"\tUTILITIES\x10\x03\x12\v\n" +
+	"\aFINANCE\x10\x04\x12\n" +
+	"\n" +
+	"\x06HEALTH\x10\x05\x12\r\n" +
+	"\tEDUCATION\x10\x06\x12\t\n" +
+	"\x05OTHER\x10\a2\xe1\x01\n" +
 	"\x13SubscriptionService\x12g\n" +
 	"\x12CreateSubscription\x12'.subscription.CreateSubscriptionRequest\x1a(.subscription.CreateSubscriptionResponse\x12a\n" +
 	"\x10GetSubscriptions\x12%.subscription.GetSubscriptionsRequest\x1a&.subscription.GetSubscriptionsResponseB@Z>github.com/PavlentiyGo/notification-service/proto/subscriptionb\x06proto3"

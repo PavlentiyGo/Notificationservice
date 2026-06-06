@@ -1,4 +1,4 @@
-package http
+package server
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/PavlentiyGo/notification-service/services/api-gateway/internal/config"
-	"github.com/PavlentiyGo/notification-service/services/api-gateway/internal/middlewares"
+	"github.com/PavlentiyGo/notification-service/services/api-gateway/internal/http/middlewares"
 )
 
 type Server struct {

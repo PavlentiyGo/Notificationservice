@@ -24,6 +24,15 @@ func (s *SubscriptionService) CreateSubscription(
 	subscription domain.Subscription,
 ) (domain.Subscription, error) {
 
+	subscriptionCreated, err := s.repo.CreateSubscriptions(
+		ctx,
+		subscription,
+	)
+	if err != nil {
+		return domain.Subscription{}, err
+	}
+	return subscriptionCreated, nil
+
 }
 func (s *SubscriptionService) GetSubscription() {
 

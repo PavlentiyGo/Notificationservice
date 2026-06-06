@@ -37,7 +37,7 @@ func Authorize(botToken string) Middleware {
 		})
 	}
 }
-func userIdFromCtx(ctx context.Context) (domain.TelegramUser, error) {
+func UserFromCtx(ctx context.Context) (domain.TelegramUser, error) {
 	val, ok := ctx.Value(tgUserKey{}).(domain.TelegramUser)
 	if !ok {
 		return domain.TelegramUser{}, fmt.Errorf("wrong user id in ctx")

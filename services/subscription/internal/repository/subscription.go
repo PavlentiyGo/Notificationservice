@@ -63,7 +63,7 @@ func (r *SubscriptionRepository) CreateSubscriptions(
 	sqlQuery := `
 	INSERT INTO subscriptions(user_id,price,currency,name,type,billing_at)
 	VALUES($1,$2,$3,$4,$5,$6)
-	RETURNING subscription_id;
+	RETURNING id;
 	`
 
 	row := r.QueryRow(

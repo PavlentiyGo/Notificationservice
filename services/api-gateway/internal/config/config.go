@@ -1,8 +1,33 @@
 package config
 
-import "time"
+import (
+	"fmt"
+	"time"
+
+	"github.com/kelseyhightower/envconfig"
+)
 
 type Config struct {
-	Addr            string
-	GracefulTimeout time.Duration
+	ServerAddr       string        `envconfig:"SERVER_ADDR"       required:"true"`
+	SubscriptionAddr string        `envconfig:"SUBSCRIPTION_ADDR" required:"true"`
+	GracefulTimeout  time.Duration `envconfig:"GRACEFUL_TIMEOUT"  default:"5s"`
+}
+
+func NewConfig() (Config, error) {
+
+	var config Config
+
+	if err := envconfig.Process("", &config); err != nil {
+		return Config{}, fmt.Errorf("failed to procces config: %w", err)
+	}
+	return config, nil
+
+}
+
+func NewConfigMust() Config {
+	config, err := NewConfig()
+	if err != nil {
+		panic(err)
+	}
+	return config
 }

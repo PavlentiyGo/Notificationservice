@@ -6,3 +6,23 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+  postgres:
+    image: postgres:18-bookworm
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - ${PROJECT_ROOT}/postgres_data:/var/lib/postgresql
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    ports:
+      - "5432:5432"
+  subscription-service:
+    build:
+      context: .
+      dockerfile: services/subscription/Dockerfile
+    ports:
+      - "5051:5051"
+    env_file:
+      - .env

@@ -34,20 +34,20 @@ message User {
 enum Currency{
   CURRENCY_UNSPECIFIED = 0;
 
-  CURRENCY_RUB = 1;
-  CURRENCY_EUR = 2;
-  CURRENCY_USD = 3;
+  RUB = 1;
+  EUR = 2;
+  USD = 3;
 }
 enum SubscriptionType {
-  SUBSCRIPTION_CATEGORY_UNSPECIFIED = 0;
+  TYPE_UNSPECIFIED = 0;
 
-  SUBSCRIPTION_CATEGORY_STREAMING = 1;   // Нетфликс, Яндекс Плюс, Спотифай
-  SUBSCRIPTION_CATEGORY_SOFTWARE = 2;    // JetBrains, ChatGPT Plus, Облако
-  SUBSCRIPTION_CATEGORY_UTILITIES = 3;   // ЖКХ, интернет, мобильная связь
-  SUBSCRIPTION_CATEGORY_FINANCE = 4;     // Кредиты, страховки, банковское обслуживание
-  SUBSCRIPTION_CATEGORY_HEALTH = 5;      // Фитнес-клуб, доставка здоровой еды, витамины
-  SUBSCRIPTION_CATEGORY_EDUCATION = 6;   // Курсы, онлайн-школы, подписки на книги
-  SUBSCRIPTION_CATEGORY_OTHER = 7;       // Всё остальное
+  STREAMING = 1;   // Нетфликс, Яндекс Плюс, Спотифай
+  SOFTWARE = 2;    // JetBrains, ChatGPT Plus, Облако
+  UTILITIES = 3;   // ЖКХ, интернет, мобильная связь
+  FINANCE = 4;     // Кредиты, страховки, банковское обслуживание
+  HEALTH = 5;      // Фитнес-клуб, доставка здоровой еды, витамины
+  EDUCATION = 6;   // Курсы, онлайн-школы, подписки на книги
+  OTHER = 7;       // Всё остальное
 }
 message CreateSubscriptionResponse{
   int32 subscription_id = 1;

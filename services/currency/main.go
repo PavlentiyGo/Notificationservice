@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 
+	currencypb "github.com/PavlentiyGo/currency-service/proto/currency"
 	"google.golang.org/grpc"
 )
 

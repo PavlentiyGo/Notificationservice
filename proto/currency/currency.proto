@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package currency;
 
-option go_package = "github.com/PavlentiyGo/notification-service/proto/currency";
+option go_package = "github.com/PavlentiyGo/currency-service/proto/currency";
 
 service CurrencyService{
   rpc GetCurrentCurrency(GetCurrentCurrencyRequest) returns (GetCurrentCurrencyResponse);

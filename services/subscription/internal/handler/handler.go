@@ -2,10 +2,11 @@ package handler
 
 import (
 	"context"
-	"log"
+	"errors"
 
 	subscriptionpb "github.com/PavlentiyGo/notification-service/proto/subscription"
 	"github.com/PavlentiyGo/notification-service/services/subscription/internal/domain"
+	errors2 "github.com/PavlentiyGo/notification-service/services/subscription/internal/errors"
 	"github.com/PavlentiyGo/notification-service/services/subscription/internal/service"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -29,19 +30,26 @@ func (h *SubscriptionHandler) CreateSubscription(
 
 	subscription := domain.Subscription{
 		SubscriptionId: nil,
-		UserId:         req.User.Id,
-		Price:          req.Price,
-		Currency:       req.Currency.String(),
-		Name:           req.Name,
-		Type:           req.Type.String(),
-		BillingAt:      req.BillingAt.AsTime(),
+		User: domain.User{
+			Id:         req.User.Id,
+			UserName:   req.User.UserName,
+			Name:       req.User.FirstName,
+			SecondName: req.User.SecondName,
+		},
+		Price:     req.Price,
+		Currency:  req.Currency.String(),
+		Name:      req.Name,
+		Type:      req.Type.String(),
+		BillingAt: req.BillingAt.AsTime(),
 	}
 	createdSubscription, err := h.service.CreateSubscription(ctx, subscription)
 	if err != nil {
-		log.Print(err, subscription.Currency)
+		if errors.Is(err, errors2.ErrInvalidArgument) {
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		}
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-	subProto := subscriptionsToProto(createdSubscription)
+	subProto := subscriptionToProto(createdSubscription)
 
 	return subProto, nil
 }
@@ -50,5 +58,18 @@ func (h *SubscriptionHandler) GetSubscriptions(
 	ctx context.Context,
 	req *subscriptionpb.GetSubscriptionsRequest,
 ) (*subscriptionpb.GetSubscriptionsResponse, error) {
-	return nil, nil
+
+	subscriptions, err := h.service.GetSubscription(ctx, req.UserId)
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	protoResp := subscriptionsToProto(subscriptions)
+
+	resp := &subscriptionpb.GetSubscriptionsResponse{
+		Subscriptions: protoResp,
+	}
+
+	return resp, nil
 }

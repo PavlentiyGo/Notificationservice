@@ -1,6 +1,7 @@
 CREATE TABLE users(
-    id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
+    id INTEGER PRIMARY KEY,
+    user_name TEXT NOT NULL,
+    first_name TEXT NOT NULL,
     second_name TEXT NOT NULL
 );
 

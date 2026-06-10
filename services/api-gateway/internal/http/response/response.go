@@ -2,6 +2,7 @@ package response
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"google.golang.org/grpc/codes"
@@ -36,9 +37,13 @@ func (r *ResponseHandler) JsonResponse(
 	r.WriteHeader(statusCode)
 	json.NewEncoder(r.ResponseWriter).Encode(&body)
 }
+func (r *ResponseHandler) NoContentResponse() {
+	r.WriteHeader(http.StatusNoContent)
+}
 
 func (r *ResponseHandler) GRPCErrorResponse(err error) {
 	errMessage := status.Convert(err).Message()
+	log.Println(err.Error(), 1)
 	switch status.Code(err) {
 	case codes.AlreadyExists:
 		r.ErrorResponse(errMessage, http.StatusConflict)

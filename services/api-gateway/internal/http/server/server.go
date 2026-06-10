@@ -24,9 +24,9 @@ func NewServer(config config.Config) *Server {
 
 func (s *Server) ChainRoutes(routes ...Route) {
 	for _, route := range routes {
-
 		prefix := fmt.Sprintf("%s %s", route.Method, route.Path)
-		s.Handle(prefix, route.Handler)
+		handler := middleware.ChainMiddlewares(route.Handler, route.Middlewares...)
+		s.Handle(prefix, handler)
 	}
 }
 
@@ -39,7 +39,7 @@ func (s *Server) Run(
 
 	server := &http.Server{
 		Handler: mux,
-		Addr:    s.config.Addr,
+		Addr:    s.config.ServerAddr,
 	}
 
 	ch := make(chan error, 1)

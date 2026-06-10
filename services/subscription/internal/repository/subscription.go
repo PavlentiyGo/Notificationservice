@@ -31,16 +31,16 @@ func (r *SubscriptionRepository) CreateUser(
 
 	ctx, cancel := context.WithTimeout(ctx, r.config.QueryTimeout)
 	defer cancel()
-
 	sqlQuery := `
-	INSERT INTO users(user_id,name,second_name) 
-	VALUES($1,$2,$3);
+	INSERT INTO users(id,user_name,first_name,second_name)  
+	VALUES($1,$2,$3,$4);
 	`
 
 	_, err := r.Exec(
 		ctx,
 		sqlQuery,
 		user.Id,
+		user.UserName,
 		user.Name,
 		user.SecondName,
 	)
@@ -60,6 +60,9 @@ func (r *SubscriptionRepository) CreateSubscriptions(
 	ctx, cancel := context.WithTimeout(ctx, r.config.QueryTimeout)
 	defer cancel()
 
+	if err := r.CreateUser(ctx, subscription.User); err != nil {
+		return domain.Subscription{}, fmt.Errorf("failed to create user: %w", err)
+	}
 	sqlQuery := `
 	INSERT INTO subscriptions(user_id,price,currency,name,type,billing_at)
 	VALUES($1,$2,$3,$4,$5,$6)
@@ -69,7 +72,7 @@ func (r *SubscriptionRepository) CreateSubscriptions(
 	row := r.QueryRow(
 		ctx,
 		sqlQuery,
-		subscription.UserId,
+		subscription.User.Id,
 		subscription.Price,
 		subscription.Currency,
 		subscription.Name,
@@ -89,14 +92,14 @@ func (r *SubscriptionRepository) CreateSubscriptions(
 
 func (r *SubscriptionRepository) GetSubscriptions(
 	ctx context.Context,
-	userId int,
+	userId int32,
 ) ([]domain.Subscription, error) {
 
 	ctx, cancel := context.WithTimeout(ctx, r.config.QueryTimeout)
 	defer cancel()
 
 	sqlQuery := `
-	SELECT subscription_id,user_id,price,currency,name,type,billing_at
+	SELECT id,user_id,price,currency,name,type,billing_at
 	FROM subscriptions
 	WHERE user_id = $1;	
 	`

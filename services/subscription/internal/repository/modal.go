@@ -24,12 +24,14 @@ func subscriptionDomainFromModal(subscriptions []Subscription) []domain.Subscrip
 	for _, val := range subscriptions {
 		subDomain := domain.Subscription{
 			SubscriptionId: &val.SubscriptionId,
-			UserId:         val.UserId,
-			Price:          val.Price,
-			Currency:       val.Currency,
-			Name:           val.Name,
-			Type:           val.Type,
-			BillingAt:      val.BillingAt,
+			User: domain.User{
+				Id: val.UserId,
+			},
+			Price:     val.Price,
+			Currency:  val.Currency,
+			Name:      val.Name,
+			Type:      val.Type,
+			BillingAt: val.BillingAt,
 		}
 		subscriptionsDomain = append(subscriptionsDomain, subDomain)
 	}

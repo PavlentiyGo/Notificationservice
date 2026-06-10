@@ -2,17 +2,11 @@ package middleware
 
 import (
 	"context"
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
-	"sort"
-	"strings"
 
 	"github.com/PavlentiyGo/notification-service/services/api-gateway/internal/domain"
+	initdata "github.com/telegram-mini-apps/init-data-golang"
 )
 
 type tgUserKey struct{}
@@ -26,8 +20,8 @@ func Authorize(botToken string) Middleware {
 				return
 			}
 			tgUser, err := validateTelegramInitData(initData, botToken)
-			if err != nil || tgUser.ID == 0 {
-				http.Error(w, "Invalid token or signature", http.StatusUnauthorized)
+			if err != nil {
+				http.Error(w, fmt.Sprintf("Invalid token or signature: %s", err), http.StatusUnauthorized)
 				return
 			}
 
@@ -45,47 +39,24 @@ func UserFromCtx(ctx context.Context) (domain.TelegramUser, error) {
 	return val, nil
 }
 
-func validateTelegramInitData(initData string, botToken string) (domain.TelegramUser, error) {
-	values, err := url.ParseQuery(initData)
+func validateTelegramInitData(initDataStr string, botToken string) (domain.TelegramUser, error) {
+	// 1. Устанавливаем время жизни данных (например, 24 часа), чтобы предотвратить использование старых данных
+
+	err := initdata.Validate(initDataStr, botToken, 0)
+	if err != nil {
+		return domain.TelegramUser{}, err // Здесь отсекаются неверные хэши и просроченные сессии
+	}
+
+	// 3. Если валидация успешна, парсим данные в готовую структуру
+	data, err := initdata.Parse(initDataStr)
 	if err != nil {
 		return domain.TelegramUser{}, err
 	}
-
-	telegramHash := values.Get("hash")
-	if telegramHash == "" {
-		return domain.TelegramUser{}, fmt.Errorf("hash not found")
-	}
-	values.Del("hash")
-
-	keys := make([]string, 0, len(values))
-	for k := range values {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-
-	var pairs []string
-	for _, k := range keys {
-		pairs = append(pairs, fmt.Sprintf("%s=%s", k, values.Get(k)))
-	}
-	dataCheckString := strings.Join(pairs, "\n")
-
-	mac := hmac.New(sha256.New, []byte("WebAppData"))
-	mac.Write([]byte(botToken))
-	secretKey := mac.Sum(nil)
-
-	signMac := hmac.New(sha256.New, secretKey)
-	signMac.Write([]byte(dataCheckString))
-	calculatedHash := hex.EncodeToString(signMac.Sum(nil))
-	equal := hmac.Equal([]byte(calculatedHash), []byte(telegramHash))
-	if !equal {
-		return domain.TelegramUser{}, fmt.Errorf("invalid token: %w", err)
-	}
-
-	userJson := values.Get("user")
-
-	var tgUser domain.TelegramUser
-	if err = json.Unmarshal([]byte(userJson), &tgUser); err != nil {
-		return domain.TelegramUser{}, fmt.Errorf("failed to unmarshal user json: %w", err)
+	tgUser := domain.TelegramUser{
+		ID:        int32(data.User.ID), //TODO int64
+		Username:  data.User.Username,
+		FirstName: data.User.FirstName,
+		LastName:  data.User.LastName,
 	}
 
 	return tgUser, nil

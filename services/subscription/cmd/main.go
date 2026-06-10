@@ -30,7 +30,7 @@ func main() {
 	grpcServ := grpc.NewServer()
 	subscriptionpb.RegisterSubscriptionServiceServer(grpcServ, subscriptionHandler)
 
-	listener, err := net.Listen("tcp", ":"+cfg.Addr)
+	listener, err := net.Listen("tcp", cfg.Addr)
 	if err != nil {
 		log.Fatalf("failed to listen subscription serv: %s", err)
 	}

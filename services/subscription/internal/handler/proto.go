@@ -6,12 +6,12 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func subscriptionsToProto(
+func subscriptionToProto(
 	val domain.Subscription,
 ) *subscriptionpb.CreateSubscriptionResponse {
 
 	currency, _ := subscriptionpb.Currency_value[val.Currency]
-	subType, _ := subscriptionpb.Currency_value[val.Type]
+	subType, _ := subscriptionpb.SubscriptionType_value[val.Type]
 	billingAt := timestamppb.New(val.BillingAt)
 
 	subProto := &subscriptionpb.CreateSubscriptionResponse{
@@ -25,4 +25,16 @@ func subscriptionsToProto(
 	}
 
 	return subProto
+}
+
+func subscriptionsToProto(
+	values []domain.Subscription,
+) []*subscriptionpb.CreateSubscriptionResponse {
+	valuesProto := make([]*subscriptionpb.CreateSubscriptionResponse, 0, len(values))
+
+	for _, val := range values {
+		proto := subscriptionToProto(val)
+		valuesProto = append(valuesProto, proto)
+	}
+	return valuesProto
 }

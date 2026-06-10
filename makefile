@@ -7,6 +7,9 @@ export PROJECT_ROOT = ${shell pwd}
 sub-up:
 	go run services/subscription/cmd/main.go
 
+api-up:
+	go run services/api-gateway/cmd/main.go
+
 env-up:
 	docker compose up -d --build
 

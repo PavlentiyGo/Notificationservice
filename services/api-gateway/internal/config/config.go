@@ -11,6 +11,8 @@ type Config struct {
 	ServerAddr       string        `envconfig:"SERVER_ADDR"       required:"true"`
 	SubscriptionAddr string        `envconfig:"SUBSCRIPTION_ADDR" required:"true"`
 	GracefulTimeout  time.Duration `envconfig:"GRACEFUL_TIMEOUT"  default:"5s"`
+
+	BotToken string `envconfig:"BOT_TOKEN"         required:"true"`
 }
 
 func NewConfig() (Config, error) {

@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"log"
 	"math"
 
 	"github.com/PavlentiyGo/notification-service/services/analysis/internal/domain"
@@ -57,7 +56,6 @@ func (s *AnalysisService) GroupPayments(
 			)
 			groupedPayments[payment.SubscriptionType] = val
 		}
-		log.Println(groupedPayments)
 	}
 	return groupedPayments
 }

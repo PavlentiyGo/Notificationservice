@@ -18,10 +18,10 @@ func StatisticResponse(payments map[string]domain.GroupPayment) *analysispb.GetS
 
 		paymentList := &analysispb.PaymentList{
 			PaymentsType:      analysispb.SubscriptionType(paymentType),
-			TotalSum:          float32(val.TotalPrice),
+			TotalSum:          val.TotalPrice,
 			SubscriptionsName: subscriptionNames,
 		}
-		resp.TotalSum += float32(val.TotalPrice)
+		resp.TotalSum += val.TotalPrice
 		for _, payment := range val.Payments {
 			paymentList.SubscriptionsName = append(paymentList.SubscriptionsName, payment.SubscriptionName)
 		}

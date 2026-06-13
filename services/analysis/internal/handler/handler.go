@@ -61,7 +61,6 @@ func (h *AnalysisHandler) GetStatistics(
 		payments,
 		currency,
 	)
-	log.Println(groupedPayments)
 	respProto := StatisticResponse(groupedPayments)
 	log.Println(respProto)
 	return respProto, nil

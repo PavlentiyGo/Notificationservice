@@ -42,3 +42,11 @@ services:
       dockerfile: services/currency/Dockerfile
     ports:
       - "5052:5052"
+  analysis-service:
+    build:
+      context: .
+      dockerfile: services/analysis/Dockerfile
+    ports:
+      - "5053:5053"
+    env_file:
+      - .env

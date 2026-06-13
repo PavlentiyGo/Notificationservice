@@ -200,7 +200,7 @@ func (x *GetStatisticsRequest) GetThisMonth() bool {
 
 type GetStatisticsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	TotalSum      float32        `protobuf:"fixed32,1,opt,name=total_sum,json=totalSum,proto3" json:"total_sum,omitempty"`
+	TotalSum      float64        `protobuf:"fixed64,1,opt,name=total_sum,json=totalSum,proto3" json:"total_sum,omitempty"`
 	PaymentsList  []*PaymentList `protobuf:"bytes,2,rep,name=payments_list,json=paymentsList,proto3" json:"payments_list,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -236,7 +236,7 @@ func (*GetStatisticsResponse) Descriptor() ([]byte, []int) {
 	return file_proto_analysis_analysis_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GetStatisticsResponse) GetTotalSum() float32 {
+func (x *GetStatisticsResponse) GetTotalSum() float64 {
 	if x != nil {
 		return x.TotalSum
 	}
@@ -253,7 +253,7 @@ func (x *GetStatisticsResponse) GetPaymentsList() []*PaymentList {
 type PaymentList struct {
 	state        protoimpl.MessageState `protogen:"open.v1"`
 	PaymentsType SubscriptionType       `protobuf:"varint,1,opt,name=payments_type,json=paymentsType,proto3,enum=analysis.SubscriptionType" json:"payments_type,omitempty"`
-	TotalSum     float32                `protobuf:"fixed32,2,opt,name=total_sum,json=totalSum,proto3" json:"total_sum,omitempty"`
+	TotalSum     float64                `protobuf:"fixed64,2,opt,name=total_sum,json=totalSum,proto3" json:"total_sum,omitempty"`
 	SubscriptionsName []string               `protobuf:"bytes,3,rep,name=subscriptions_name,json=subscriptionsName,proto3" json:"subscriptions_name,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
@@ -296,7 +296,7 @@ func (x *PaymentList) GetPaymentsType() SubscriptionType {
 	return SubscriptionType_TYPE_UNSPECIFIED
 }
 
-func (x *PaymentList) GetTotalSum() float32 {
+func (x *PaymentList) GetTotalSum() float64 {
 	if x != nil {
 		return x.TotalSum
 	}
@@ -321,11 +321,11 @@ const file_proto_analysis_analysis_proto_rawDesc = "" +
 	"\n" +
 	"this_month\x18\x03 \x01(\bR\tthisMonth\"p\n" +
 	"\x15GetStatisticsResponse\x12\x1b\n" +
-	"\ttotal_sum\x18\x01 \x01(\x02R\btotalSum\x12:\n" +
+	"\ttotal_sum\x18\x01 \x01(\x01R\btotalSum\x12:\n" +
 	"\rpayments_list\x18\x02 \x03(\v2\x15.analysis.PaymentListR\fpaymentsList\"\x9a\x01\n" +
 	"\vPaymentList\x12?\n" +
 	"\rpayments_type\x18\x01 \x01(\x0e2\x1a.analysis.SubscriptionTypeR\fpaymentsType\x12\x1b\n" +
-	"\ttotal_sum\x18\x02 \x01(\x02R\btotalSum\x12-\n" +
+	"\ttotal_sum\x18\x02 \x01(\x01R\btotalSum\x12-\n" +
 	"\x12subscriptions_name\x18\x03 \x03(\tR\x11subscriptionsName*?\n" +
 	"\bCurrency\x12\x18\n" +
 	"\x14CURRENCY_UNSPECIFIED\x10\x00\x12\a\n" +

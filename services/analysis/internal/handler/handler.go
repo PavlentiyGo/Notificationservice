@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"log"
 
 	analysispb "github.com/PavlentiyGo/notification-service/proto/analysis"
 	currencypb "github.com/PavlentiyGo/notification-service/proto/currency"
@@ -60,8 +61,8 @@ func (h *AnalysisHandler) GetStatistics(
 		payments,
 		currency,
 	)
-
+	log.Println(groupedPayments)
 	respProto := StatisticResponse(groupedPayments)
-
+	log.Println(respProto)
 	return respProto, nil
 }

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"log"
 	"math"
 
 	"github.com/PavlentiyGo/notification-service/services/analysis/internal/domain"
@@ -42,7 +43,8 @@ func (s *AnalysisService) GroupPayments(
 				TotalPrice: convertCurrency(
 					payment.SubscriptionCurrency,
 					currentCurrency.MainCurrency,
-					currentCurrency, payment.Price,
+					currentCurrency,
+					payment.Price,
 				),
 			}
 		} else {
@@ -50,14 +52,15 @@ func (s *AnalysisService) GroupPayments(
 			val.TotalPrice += convertCurrency(
 				payment.SubscriptionCurrency,
 				currentCurrency.MainCurrency,
-				currentCurrency, payment.Price,
+				currentCurrency,
+				payment.Price,
 			)
 			groupedPayments[payment.SubscriptionType] = val
 		}
+		log.Println(groupedPayments)
 	}
 	return groupedPayments
 }
-
 func convertCurrency(from, to string, currency domain.Currency, price float64) float64 {
 	if from == to {
 		return price

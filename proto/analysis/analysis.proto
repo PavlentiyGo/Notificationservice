@@ -18,14 +18,14 @@ message GetStatisticsRequest{
 }
 
 message GetStatisticsResponse{
-  float total_sum = 1;
+  double total_sum = 1;
   repeated PaymentList payments_list = 2;
 }
 
 
 message PaymentList{
   SubscriptionType payments_type = 1;
-  float total_sum = 2;
+  double total_sum = 2;
   repeated string subscriptions_name = 3;
 }
 

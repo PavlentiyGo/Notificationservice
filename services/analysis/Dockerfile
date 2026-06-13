@@ -8,13 +8,13 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o api-gateway ./services/analysis/cmd/main.go
+RUN go build -o analysis-service ./services/analysis/cmd/main.go
 
 FROM alpine:3.20
 
 WORKDIR /app
 
-COPY --from=builder /app/analysis .
+COPY --from=builder /app/analysis-service .
 COPY --from=builder /app/services/subscription/migrations ./migrations
 EXPOSE 5053
 

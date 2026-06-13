@@ -3,6 +3,8 @@ export
 
 export PROJECT_ROOT = ${shell pwd}
 
+analysis-up:
+	go run services/analysis/cmd/main.go
 
 sub-up:
 	go run services/subscription/cmd/main.go

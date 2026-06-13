@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package analysis;
+
+option go_package = "github.com/PavlentiyGo/notification-service/proto/analysis";
+
+
+service AnalysisService{
+  rpc GetStatistics(GetStatisticsRequest) returns (GetStatisticsResponse);
+
+}
+
+message GetStatisticsRequest{
+  Currency total_currency = 1;
+  int32 user_id = 2;
+
+  bool this_month = 3;
+}
+
+message GetStatisticsResponse{
+  float total_sum = 1;
+  repeated PaymentList payments_list = 2;
+}
+
+
+message PaymentList{
+  SubscriptionType payments_type = 1;
+  float total_sum = 2;
+  repeated string subscriptions_name = 3;
+}
+
+enum Currency{
+  CURRENCY_UNSPECIFIED = 0;
+
+  RUB = 1;
+  EUR = 2;
+  USD = 3;
+}
+
+enum SubscriptionType {
+  TYPE_UNSPECIFIED = 0;
+
+  STREAMING = 1;   // Нетфликс, Яндекс Плюс, Спотифай
+  SOFTWARE = 2;    // JetBrains, ChatGPT Plus, Облако
+  UTILITIES = 3;   // ЖКХ, интернет, мобильная связь
+  FINANCE = 4;     // Кредиты, страховки, банковское обслуживание
+  HEALTH = 5;      // Фитнес-клуб, доставка здоровой еды, витамины
+  EDUCATION = 6;   // Курсы, онлайн-школы, подписки на книги
+  OTHER = 7;       // Всё остальное
+}

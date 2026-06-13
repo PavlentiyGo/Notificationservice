@@ -75,20 +75,16 @@ message DeleteSubscriptionResponse{
 }
 
 
-message ChangeTotalCurrencyRequest{
-  Currency currency = 1;
+message PatchSubscriptionRequest{
+
 }
-message ChangeTotalCurrencyResponse{
-  Currency currency = 1;
+message PathSubscriptionResponse{
+
 }
 
-message GetStatisticRequest{
-  Currency total_currency = 1;
-  int32 user_id = 2;
+message PaySubscriptionRequest{
 
-  google.protobuf.Timestamp since = 3;
-  google.protobuf.Timestamp to = 4;
 }
-message GetStatisticResponse{
-  int32 total = 1;
+message PaySubscriptionResponse{
+
 }

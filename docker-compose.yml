@@ -36,5 +36,9 @@ services:
       - "5050:5050"
     env_file:
       - .env
-
-
+  currency:
+    build:
+      context: .
+      dockerfile: services/currency/Dockerfile
+    ports:
+      - "5052:5052"

@@ -8,7 +8,7 @@ CREATE TABLE users(
 CREATE TABLE subscriptions(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
-    price INTEGER CHECK ( price > 0 ) NOT NULL,
+    price DECIMAL CHECK ( price > 0 ) NOT NULL,
     currency TEXT CHECK ( currency IN ('RUB','USD','EUR')),
     name TEXT NOT NULL,
     type TEXT CHECK ( type IN ('STREAMING','SOFTWARE','UTILITIES','FINANCE','HEALTH','EDUCATION','OTHER')),

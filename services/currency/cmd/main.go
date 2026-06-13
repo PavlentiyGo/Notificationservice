@@ -11,6 +11,7 @@ import (
 	"time"
 
 	currencypb "github.com/PavlentiyGo/notification-service/proto/currency"
+	dto "github.com/PavlentiyGo/notification-service/services/currency"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -83,7 +84,7 @@ func (s *CurrencyService) parseCurrency() error {
 	if err != nil {
 		return fmt.Errorf("failed to do request: %w", err)
 	}
-	var decode CurrencyResponse
+	var decode dto.CurrencyResponse
 
 	if err = json.NewDecoder(resp.Body).Decode(&decode); err != nil {
 		return fmt.Errorf("failed to decode request: %w", err)

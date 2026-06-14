@@ -8,7 +8,6 @@ import "google/protobuf/timestamp.proto";
 service AnalysisService{
   rpc GetStatistics(GetStatisticsRequest) returns (GetStatisticsResponse);
   rpc AddPayment(AddPaymentRequest) returns (AddPaymentResponse);
-
 }
 
 message GetStatisticsRequest{

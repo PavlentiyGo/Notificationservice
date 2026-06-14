@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	AnalysisService_GetStatistics_FullMethodName = "/analysis.AnalysisService/GetStatistics"
+	AnalysisService_AddPayment_FullMethodName    = "/analysis.AnalysisService/AddPayment"
 )
 
 // AnalysisServiceClient is the client API for AnalysisService service.
@@ -28,6 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AnalysisServiceClient interface {
 	GetStatistics(ctx context.Context, in *GetStatisticsRequest, opts ...grpc.CallOption) (*GetStatisticsResponse, error)
+	AddPayment(ctx context.Context, in *AddPaymentRequest, opts ...grpc.CallOption) (*AddPaymentResponse, error)
 }
 
 type analysisServiceClient struct {
@@ -48,11 +50,22 @@ func (c *analysisServiceClient) GetStatistics(ctx context.Context, in *GetStatis
 	return out, nil
 }
 
+func (c *analysisServiceClient) AddPayment(ctx context.Context, in *AddPaymentRequest, opts ...grpc.CallOption) (*AddPaymentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddPaymentResponse)
+	err := c.cc.Invoke(ctx, AnalysisService_AddPayment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AnalysisServiceServer is the server API for AnalysisService service.
 // All implementations must embed UnimplementedAnalysisServiceServer
 // for forward compatibility.
 type AnalysisServiceServer interface {
 	GetStatistics(context.Context, *GetStatisticsRequest) (*GetStatisticsResponse, error)
+	AddPayment(context.Context, *AddPaymentRequest) (*AddPaymentResponse, error)
 	mustEmbedUnimplementedAnalysisServiceServer()
 }
 
@@ -65,6 +78,9 @@ type UnimplementedAnalysisServiceServer struct{}
 
 func (UnimplementedAnalysisServiceServer) GetStatistics(context.Context, *GetStatisticsRequest) (*GetStatisticsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetStatistics not implemented")
+}
+func (UnimplementedAnalysisServiceServer) AddPayment(context.Context, *AddPaymentRequest) (*AddPaymentResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AddPayment not implemented")
 }
 func (UnimplementedAnalysisServiceServer) mustEmbedUnimplementedAnalysisServiceServer() {}
 func (UnimplementedAnalysisServiceServer) testEmbeddedByValue()                         {}
@@ -105,6 +121,24 @@ func _AnalysisService_GetStatistics_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AnalysisService_AddPayment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddPaymentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AnalysisServiceServer).AddPayment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AnalysisService_AddPayment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AnalysisServiceServer).AddPayment(ctx, req.(*AddPaymentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AnalysisService_ServiceDesc is the grpc.ServiceDesc for AnalysisService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -115,6 +149,10 @@ var AnalysisService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetStatistics",
 			Handler:    _AnalysisService_GetStatistics_Handler,
+		},
+		{
+			MethodName: "AddPayment",
+			Handler:    _AnalysisService_AddPayment_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -480,9 +480,11 @@ const file_proto_analysis_analysis_proto_rawDesc = "" +
 	"\n" +
 	"\x06HEALTH\x10\x05\x12\r\n" +
 	"\tEDUCATION\x10\x06\x12\t\n" +
-	"\x05OTHER\x10\a2c\n" +
+	"\x05OTHER\x10\a2\xac\x01\n" +
 	"\x0fAnalysisService\x12P\n" +
-	"\rGetStatistics\x12\x1e.analysis.GetStatisticsRequest\x1a\x1f.analysis.GetStatisticsResponseB<Z:github.com/PavlentiyGo/notification-service/proto/analysisb\x06proto3"
+	"\rGetStatistics\x12\x1e.analysis.GetStatisticsRequest\x1a\x1f.analysis.GetStatisticsResponse\x12G\n" +
+	"\n" +
+	"AddPayment\x12\x1b.analysis.AddPaymentRequest\x1a\x1c.analysis.AddPaymentResponseB<Z:github.com/PavlentiyGo/notification-service/proto/analysisb\x06proto3"
 
 var (
 	file_proto_analysis_analysis_proto_rawDescOnce sync.Once
@@ -517,9 +519,11 @@ var file_proto_analysis_analysis_proto_depIdxs = []int32{
 	0, // 5: analysis.AddPaymentRequest.currency:type_name -> analysis.Currency
 	7, // 6: analysis.AddPaymentResponse.next_billing_at:type_name -> google.protobuf.Timestamp
 	2, // 7: analysis.AnalysisService.GetStatistics:input_type -> analysis.GetStatisticsRequest
-	3, // 8: analysis.AnalysisService.GetStatistics:output_type -> analysis.GetStatisticsResponse
-	8, // [8:9] is the sub-list for method output_type
-	7, // [7:8] is the sub-list for method input_type
+	5, // 8: analysis.AnalysisService.AddPayment:input_type -> analysis.AddPaymentRequest
+	3, // 9: analysis.AnalysisService.GetStatistics:output_type -> analysis.GetStatisticsResponse
+	6, // 10: analysis.AnalysisService.AddPayment:output_type -> analysis.AddPaymentResponse
+	9, // [9:11] is the sub-list for method output_type
+	7, // [7:9] is the sub-list for method input_type
 	7, // [7:7] is the sub-list for extension type_name
 	7, // [7:7] is the sub-list for extension extendee
 	0, // [0:7] is the sub-list for field type_name

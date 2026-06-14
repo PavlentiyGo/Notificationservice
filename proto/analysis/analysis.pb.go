@@ -13,6 +13,7 @@ import (
 
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 )
 
 const (
@@ -200,7 +201,7 @@ func (x *GetStatisticsRequest) GetThisMonth() bool {
 
 type GetStatisticsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	TotalSum      float64        `protobuf:"fixed64,1,opt,name=total_sum,json=totalSum,proto3" json:"total_sum,omitempty"`
+	TotalSum      string         `protobuf:"bytes,1,opt,name=total_sum,json=totalSum,proto3" json:"total_sum,omitempty"`
 	PaymentsList  []*PaymentList `protobuf:"bytes,2,rep,name=payments_list,json=paymentsList,proto3" json:"payments_list,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -236,11 +237,11 @@ func (*GetStatisticsResponse) Descriptor() ([]byte, []int) {
 	return file_proto_analysis_analysis_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GetStatisticsResponse) GetTotalSum() float64 {
+func (x *GetStatisticsResponse) GetTotalSum() string {
 	if x != nil {
 		return x.TotalSum
 	}
-	return 0
+	return ""
 }
 
 func (x *GetStatisticsResponse) GetPaymentsList() []*PaymentList {
@@ -253,7 +254,7 @@ func (x *GetStatisticsResponse) GetPaymentsList() []*PaymentList {
 type PaymentList struct {
 	state        protoimpl.MessageState `protogen:"open.v1"`
 	PaymentsType SubscriptionType       `protobuf:"varint,1,opt,name=payments_type,json=paymentsType,proto3,enum=analysis.SubscriptionType" json:"payments_type,omitempty"`
-	TotalSum     float64                `protobuf:"fixed64,2,opt,name=total_sum,json=totalSum,proto3" json:"total_sum,omitempty"`
+	TotalSum     string                 `protobuf:"bytes,2,opt,name=total_sum,json=totalSum,proto3" json:"total_sum,omitempty"`
 	SubscriptionsName []string               `protobuf:"bytes,3,rep,name=subscriptions_name,json=subscriptionsName,proto3" json:"subscriptions_name,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
@@ -296,11 +297,11 @@ func (x *PaymentList) GetPaymentsType() SubscriptionType {
 	return SubscriptionType_TYPE_UNSPECIFIED
 }
 
-func (x *PaymentList) GetTotalSum() float64 {
+func (x *PaymentList) GetTotalSum() string {
 	if x != nil {
 		return x.TotalSum
 	}
-	return 0
+	return ""
 }
 
 func (x *PaymentList) GetSubscriptionsName() []string {
@@ -310,23 +311,161 @@ func (x *PaymentList) GetSubscriptionsName() []string {
 	return nil
 }
 
+type AddPaymentRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        int32                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Date     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=date,proto3,oneof" json:"date,omitempty"`
+	Type     SubscriptionType       `protobuf:"varint,3,opt,name=type,proto3,enum=analysis.SubscriptionType" json:"type,omitempty"`
+	Name     string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Currency Currency               `protobuf:"varint,5,opt,name=currency,proto3,enum=analysis.Currency" json:"currency,omitempty"`
+	Price    float64                `protobuf:"fixed64,6,opt,name=price,proto3" json:"price,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddPaymentRequest) Reset() {
+	*x = AddPaymentRequest{}
+	mi := &file_proto_analysis_analysis_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddPaymentRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddPaymentRequest) ProtoMessage() {}
+
+func (x *AddPaymentRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_analysis_analysis_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddPaymentRequest.ProtoReflect.Descriptor instead.
+func (*AddPaymentRequest) Descriptor() ([]byte, []int) {
+	return file_proto_analysis_analysis_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *AddPaymentRequest) GetUserId() int32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *AddPaymentRequest) GetDate() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Date
+	}
+	return nil
+}
+
+func (x *AddPaymentRequest) GetType() SubscriptionType {
+	if x != nil {
+		return x.Type
+	}
+	return SubscriptionType_TYPE_UNSPECIFIED
+}
+
+func (x *AddPaymentRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *AddPaymentRequest) GetCurrency() Currency {
+	if x != nil {
+		return x.Currency
+	}
+	return Currency_CURRENCY_UNSPECIFIED
+}
+
+func (x *AddPaymentRequest) GetPrice() float64 {
+	if x != nil {
+		return x.Price
+	}
+	return 0
+}
+
+type AddPaymentResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	NextBillingAt *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=next_billing_at,json=nextBillingAt,proto3" json:"next_billing_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddPaymentResponse) Reset() {
+	*x = AddPaymentResponse{}
+	mi := &file_proto_analysis_analysis_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddPaymentResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddPaymentResponse) ProtoMessage() {}
+
+func (x *AddPaymentResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_analysis_analysis_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddPaymentResponse.ProtoReflect.Descriptor instead.
+func (*AddPaymentResponse) Descriptor() ([]byte, []int) {
+	return file_proto_analysis_analysis_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *AddPaymentResponse) GetNextBillingAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.NextBillingAt
+	}
+	return nil
+}
+
 var File_proto_analysis_analysis_proto protoreflect.FileDescriptor
 
 const file_proto_analysis_analysis_proto_rawDesc = "" +
 	"\n" +
-	"\x1dproto/analysis/analysis.proto\x12\banalysis\"\x89\x01\n" +
+	"\x1dproto/analysis/analysis.proto\x12\banalysis\x1a\x1fgoogle/protobuf/timestamp.proto\"\x89\x01\n" +
 	"\x14GetStatisticsRequest\x129\n" +
 	"\x0etotal_currency\x18\x01 \x01(\x0e2\x12.analysis.CurrencyR\rtotalCurrency\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\x05R\x06userId\x12\x1d\n" +
 	"\n" +
 	"this_month\x18\x03 \x01(\bR\tthisMonth\"p\n" +
 	"\x15GetStatisticsResponse\x12\x1b\n" +
-	"\ttotal_sum\x18\x01 \x01(\x01R\btotalSum\x12:\n" +
+	"\ttotal_sum\x18\x01 \x01(\tR\btotalSum\x12:\n" +
 	"\rpayments_list\x18\x02 \x03(\v2\x15.analysis.PaymentListR\fpaymentsList\"\x9a\x01\n" +
 	"\vPaymentList\x12?\n" +
 	"\rpayments_type\x18\x01 \x01(\x0e2\x1a.analysis.SubscriptionTypeR\fpaymentsType\x12\x1b\n" +
-	"\ttotal_sum\x18\x02 \x01(\x01R\btotalSum\x12-\n" +
-	"\x12subscriptions_name\x18\x03 \x03(\tR\x11subscriptionsName*?\n" +
+	"\ttotal_sum\x18\x02 \x01(\tR\btotalSum\x12-\n" +
+	"\x12subscriptions_name\x18\x03 \x03(\tR\x11subscriptionsName\"\xf4\x01\n" +
+	"\x11AddPaymentRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x05R\x06userId\x123\n" +
+	"\x04date\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x00R\x04date\x88\x01\x01\x12.\n" +
+	"\x04type\x18\x03 \x01(\x0e2\x1a.analysis.SubscriptionTypeR\x04type\x12\x12\n" +
+	"\x04name\x18\x04 \x01(\tR\x04name\x12.\n" +
+	"\bcurrency\x18\x05 \x01(\x0e2\x12.analysis.CurrencyR\bcurrency\x12\x14\n" +
+	"\x05price\x18\x06 \x01(\x01R\x05priceB\a\n" +
+	"\x05_date\"X\n" +
+	"\x12AddPaymentResponse\x12B\n" +
+	"\x0fnext_billing_at\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\rnextBillingAt*?\n" +
 	"\bCurrency\x12\x18\n" +
 	"\x14CURRENCY_UNSPECIFIED\x10\x00\x12\a\n" +
 	"\x03RUB\x10\x01\x12\a\n" +
@@ -358,25 +497,32 @@ func file_proto_analysis_analysis_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_analysis_analysis_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_proto_analysis_analysis_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_proto_analysis_analysis_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_proto_analysis_analysis_proto_goTypes = []any{
 	(Currency)(0),                 // 0: analysis.Currency
 	(SubscriptionType)(0),         // 1: analysis.SubscriptionType
 	(*GetStatisticsRequest)(nil),  // 2: analysis.GetStatisticsRequest
 	(*GetStatisticsResponse)(nil), // 3: analysis.GetStatisticsResponse
 	(*PaymentList)(nil),           // 4: analysis.PaymentList
+	(*AddPaymentRequest)(nil),     // 5: analysis.AddPaymentRequest
+	(*AddPaymentResponse)(nil),    // 6: analysis.AddPaymentResponse
+	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
 }
 var file_proto_analysis_analysis_proto_depIdxs = []int32{
 	0, // 0: analysis.GetStatisticsRequest.total_currency:type_name -> analysis.Currency
 	4, // 1: analysis.GetStatisticsResponse.payments_list:type_name -> analysis.PaymentList
 	1, // 2: analysis.PaymentList.payments_type:type_name -> analysis.SubscriptionType
-	2, // 3: analysis.AnalysisService.GetStatistics:input_type -> analysis.GetStatisticsRequest
-	3, // 4: analysis.AnalysisService.GetStatistics:output_type -> analysis.GetStatisticsResponse
-	4, // [4:5] is the sub-list for method output_type
-	3, // [3:4] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	7, // 3: analysis.AddPaymentRequest.date:type_name -> google.protobuf.Timestamp
+	1, // 4: analysis.AddPaymentRequest.type:type_name -> analysis.SubscriptionType
+	0, // 5: analysis.AddPaymentRequest.currency:type_name -> analysis.Currency
+	7, // 6: analysis.AddPaymentResponse.next_billing_at:type_name -> google.protobuf.Timestamp
+	2, // 7: analysis.AnalysisService.GetStatistics:input_type -> analysis.GetStatisticsRequest
+	3, // 8: analysis.AnalysisService.GetStatistics:output_type -> analysis.GetStatisticsResponse
+	8, // [8:9] is the sub-list for method output_type
+	7, // [7:8] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_proto_analysis_analysis_proto_init() }
@@ -384,13 +530,14 @@ func file_proto_analysis_analysis_proto_init() {
 	if File_proto_analysis_analysis_proto != nil {
 		return
 	}
+	file_proto_analysis_analysis_proto_msgTypes[3].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_analysis_analysis_proto_rawDesc), len(file_proto_analysis_analysis_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   3,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

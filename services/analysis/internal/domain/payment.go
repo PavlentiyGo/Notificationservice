@@ -1,6 +1,10 @@
 package domain
 
+import "time"
+
 type Payment struct {
+	BillingAt *time.Time
+
 	SubscriptionName     string
 	SubscriptionType     string
 	SubscriptionCurrency string

@@ -16,14 +16,14 @@ import (
 )
 
 type SubscriptionHandler struct {
-	client subscriptionpb.SubscriptionServiceClient
-	config config.Config
+	subscriptionClient subscriptionpb.SubscriptionServiceClient
+	config             config.Config
 }
 
 func NewSubscriptionHandler(conn *grpc.ClientConn, config config.Config) *SubscriptionHandler {
 	return &SubscriptionHandler{
-		client: subscriptionpb.NewSubscriptionServiceClient(conn),
-		config: config,
+		subscriptionClient: subscriptionpb.NewSubscriptionServiceClient(conn),
+		config:             config,
 	}
 }
 
@@ -94,7 +94,7 @@ func (h *SubscriptionHandler) CreateSubscription(
 		responseHandler.ErrorResponse(fmt.Sprintf("invalid billingAt field: %s", subscriptionRequest.BillingAt), http.StatusBadRequest)
 		return
 	}
-	resp, err := h.client.CreateSubscription(r.Context(), &subscriptionpb.CreateSubscriptionRequest{
+	resp, err := h.subscriptionClient.CreateSubscription(r.Context(), &subscriptionpb.CreateSubscriptionRequest{
 		User: &subscriptionpb.User{
 			Id:         user.ID,
 			UserName:   user.Username,
@@ -134,7 +134,7 @@ func (h *SubscriptionHandler) GetSubscriptions(
 		responseHandler.ErrorResponse(err.Error(), http.StatusInternalServerError)
 		return
 	}
-	resp, err := h.client.GetSubscriptions(r.Context(), &subscriptionpb.GetSubscriptionsRequest{UserId: user.ID})
+	resp, err := h.subscriptionClient.GetSubscriptions(r.Context(), &subscriptionpb.GetSubscriptionsRequest{UserId: user.ID})
 	if err != nil {
 		responseHandler.GRPCErrorResponse(err)
 		return

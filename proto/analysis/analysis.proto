@@ -4,9 +4,10 @@ package analysis;
 
 option go_package = "github.com/PavlentiyGo/notification-service/proto/analysis";
 
-
+import "google/protobuf/timestamp.proto";
 service AnalysisService{
   rpc GetStatistics(GetStatisticsRequest) returns (GetStatisticsResponse);
+  rpc AddPayment(AddPaymentRequest) returns (AddPaymentResponse);
 
 }
 
@@ -18,14 +19,14 @@ message GetStatisticsRequest{
 }
 
 message GetStatisticsResponse{
-  double total_sum = 1;
+  string total_sum = 1;
   repeated PaymentList payments_list = 2;
 }
 
 
 message PaymentList{
   SubscriptionType payments_type = 1;
-  double total_sum = 2;
+  string total_sum = 2;
   repeated string subscriptions_name = 3;
 }
 
@@ -47,4 +48,18 @@ enum SubscriptionType {
   HEALTH = 5;      // Фитнес-клуб, доставка здоровой еды, витамины
   EDUCATION = 6;   // Курсы, онлайн-школы, подписки на книги
   OTHER = 7;       // Всё остальное
+}
+
+message AddPaymentRequest{
+  int32 user_id = 1;
+  optional google.protobuf.Timestamp date = 2;
+
+  SubscriptionType type = 3;
+  string name = 4;
+  Currency currency = 5;
+  double price = 6;
+}
+
+message AddPaymentResponse{
+  google.protobuf.Timestamp next_billing_at = 1;
 }

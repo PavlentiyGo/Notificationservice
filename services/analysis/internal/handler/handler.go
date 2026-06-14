@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"log"
 
 	analysispb "github.com/PavlentiyGo/notification-service/proto/analysis"
 	currencypb "github.com/PavlentiyGo/notification-service/proto/currency"
@@ -11,6 +10,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type AnalysisHandler struct {
@@ -62,6 +62,31 @@ func (h *AnalysisHandler) GetStatistics(
 		currency,
 	)
 	respProto := StatisticResponse(groupedPayments)
-	log.Println(respProto)
 	return respProto, nil
+}
+func (h *AnalysisHandler) AddPayment(
+	ctx context.Context,
+	request *analysispb.AddPaymentRequest,
+) (*analysispb.AddPaymentResponse, error) {
+	billingAtTime := request.Date.AsTime()
+
+	payment, err := h.service.AddPayment(
+		ctx,
+		domain.Payment{
+			BillingAt:            &billingAtTime,
+			SubscriptionName:     request.Name,
+			SubscriptionType:     request.Type.String(),
+			SubscriptionCurrency: request.Currency.String(),
+			Price:                request.Price,
+		},
+		request.UserId,
+	)
+	if err != nil {
+		return nil, status.Error(codes.Internal, "internal error")
+	}
+	resp := &analysispb.AddPaymentResponse{
+		NextBillingAt: timestamppb.New(*payment.BillingAt),
+	}
+
+	return resp, nil
 }

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	analysispb "github.com/PavlentiyGo/notification-service/proto/analysis"
 	subscriptionpb "github.com/PavlentiyGo/notification-service/proto/subscription"
 )
 
@@ -42,4 +43,42 @@ func SubscriptionsDtoFromProto(
 		subscDto = append(subscDto, dto)
 	}
 	return subscDto
+}
+
+type GetStatisticRequest struct {
+	TotalCurrency string `json:"total_currency" validate:"oneof= RUB EUR USD"`
+	ThisMonth     bool   `json:"this_month"`
+}
+
+type GetStatisticResponse struct {
+	TotalSum string         `json:"total_sum"`
+	Payments []PaymentTypes `json:"payments"`
+}
+
+type PaymentTypes struct {
+	Type          string   `json:"type"`
+	TotalSum      string   `json:"total_sum"`
+	Subscriptions []string `json:"subscriptions"`
+}
+
+func StatisticResponseFromProto(
+	response *analysispb.GetStatisticsResponse,
+) GetStatisticResponse {
+
+	payments := make([]PaymentTypes, 0, len(response.PaymentsList))
+	statisticResponse := GetStatisticResponse{
+		TotalSum: response.TotalSum,
+		Payments: nil,
+	}
+
+	for _, payment := range response.PaymentsList {
+		paymentType := PaymentTypes{
+			Type:          payment.PaymentsType.String(),
+			TotalSum:      payment.TotalSum,
+			Subscriptions: payment.SubscriptionsName,
+		}
+		payments = append(payments, paymentType)
+	}
+	statisticResponse.Payments = payments
+	return statisticResponse
 }

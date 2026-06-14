@@ -71,3 +71,33 @@ func (r *AnalysisRepository) GetStatistics(
 
 	return domainPayments, err
 }
+
+func (r *AnalysisRepository) AddPayment(
+	ctx context.Context,
+	payment domain.Payment,
+	userId int32,
+) error {
+	ctx, cancel := context.WithTimeout(ctx, r.config.QueryTimeout)
+	defer cancel()
+
+	sqlQuery := `
+	INSERT INTO payments(user_id,date, subscription_name,subscription_type, subscription_currency, price)
+	VALUES($1,$2,$3,$4,$5,$6);
+	`
+
+	_, err := r.pool.Exec(
+		ctx,
+		sqlQuery,
+		userId,
+		payment.BillingAt,
+		payment.SubscriptionName,
+		payment.SubscriptionType,
+		payment.SubscriptionCurrency,
+		payment.Price,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to execute sql: %w", err)
+	}
+
+	return nil
+}

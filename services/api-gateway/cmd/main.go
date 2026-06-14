@@ -22,14 +22,23 @@ func main() {
 
 	serv := server.NewServer(cfg)
 
-	subscriptionClient, err := grpc_client.NewGRPCConn(cfg.SubscriptionAddr)
+	subscriptionConn, err := grpc_client.NewGRPCConn(cfg.SubscriptionAddr)
 	if err != nil {
 		log.Fatalf("failed to start subs client: %s", err)
 	}
-	defer subscriptionClient.Close()
+	defer subscriptionConn.Close()
 
-	subscriptionHandler := handlers.NewSubscriptionHandler(subscriptionClient, cfg)
+	subscriptionHandler := handlers.NewSubscriptionHandler(subscriptionConn, cfg)
 	serv.ChainRoutes(subscriptionHandler.Routes()...)
+
+	analysisConn, err := grpc_client.NewGRPCConn(cfg.AnalysisAddr)
+	if err != nil {
+		log.Fatalf("failed to start subs client: %s", err)
+	}
+	defer analysisConn.Close()
+
+	analysisHandler := handlers.NewAnalysisHandler(cfg, analysisConn)
+	serv.ChainRoutes(analysisHandler.Routes()...)
 
 	if err = serv.Run(
 		ctx,

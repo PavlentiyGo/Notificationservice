@@ -312,15 +312,16 @@ func (x *PaymentList) GetSubscriptionsName() []string {
 }
 
 type AddPaymentRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        int32                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Date     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=date,proto3,oneof" json:"date,omitempty"`
-	Type     SubscriptionType       `protobuf:"varint,3,opt,name=type,proto3,enum=analysis.SubscriptionType" json:"type,omitempty"`
-	Name     string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Currency Currency               `protobuf:"varint,5,opt,name=currency,proto3,enum=analysis.Currency" json:"currency,omitempty"`
-	Price    float64                `protobuf:"fixed64,6,opt,name=price,proto3" json:"price,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	UserId         int32                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	SubscriptionId int32            `protobuf:"varint,2,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
+	Type           SubscriptionType `protobuf:"varint,3,opt,name=type,proto3,enum=analysis.SubscriptionType" json:"type,omitempty"`
+	Name           string           `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Currency       Currency         `protobuf:"varint,5,opt,name=currency,proto3,enum=analysis.Currency" json:"currency,omitempty"`
+	Price          float64          `protobuf:"fixed64,6,opt,name=price,proto3" json:"price,omitempty"`
+	BillingAt      *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=billing_at,json=billingAt,proto3" json:"billing_at,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *AddPaymentRequest) Reset() {
@@ -360,11 +361,11 @@ func (x *AddPaymentRequest) GetUserId() int32 {
 	return 0
 }
 
-func (x *AddPaymentRequest) GetDate() *timestamppb.Timestamp {
+func (x *AddPaymentRequest) GetSubscriptionId() int32 {
 	if x != nil {
-		return x.Date
+		return x.SubscriptionId
 	}
-	return nil
+	return 0
 }
 
 func (x *AddPaymentRequest) GetType() SubscriptionType {
@@ -393,6 +394,13 @@ func (x *AddPaymentRequest) GetPrice() float64 {
 		return x.Price
 	}
 	return 0
+}
+
+func (x *AddPaymentRequest) GetBillingAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.BillingAt
+	}
+	return nil
 }
 
 type AddPaymentResponse struct {
@@ -455,15 +463,16 @@ const file_proto_analysis_analysis_proto_rawDesc = "" +
 	"\vPaymentList\x12?\n" +
 	"\rpayments_type\x18\x01 \x01(\x0e2\x1a.analysis.SubscriptionTypeR\fpaymentsType\x12\x1b\n" +
 	"\ttotal_sum\x18\x02 \x01(\tR\btotalSum\x12-\n" +
-	"\x12subscriptions_name\x18\x03 \x03(\tR\x11subscriptionsName\"\xf4\x01\n" +
+	"\x12subscriptions_name\x18\x03 \x03(\tR\x11subscriptionsName\"\x9a\x02\n" +
 	"\x11AddPaymentRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x05R\x06userId\x123\n" +
-	"\x04date\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x00R\x04date\x88\x01\x01\x12.\n" +
+	"\auser_id\x18\x01 \x01(\x05R\x06userId\x12'\n" +
+	"\x0fsubscription_id\x18\x02 \x01(\x05R\x0esubscriptionId\x12.\n" +
 	"\x04type\x18\x03 \x01(\x0e2\x1a.analysis.SubscriptionTypeR\x04type\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x12.\n" +
 	"\bcurrency\x18\x05 \x01(\x0e2\x12.analysis.CurrencyR\bcurrency\x12\x14\n" +
-	"\x05price\x18\x06 \x01(\x01R\x05priceB\a\n" +
-	"\x05_date\"X\n" +
+	"\x05price\x18\x06 \x01(\x01R\x05price\x129\n" +
+	"\n" +
+	"billing_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tbillingAt\"X\n" +
 	"\x12AddPaymentResponse\x12B\n" +
 	"\x0fnext_billing_at\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\rnextBillingAt*?\n" +
 	"\bCurrency\x12\x18\n" +
@@ -514,9 +523,9 @@ var file_proto_analysis_analysis_proto_depIdxs = []int32{
 	0, // 0: analysis.GetStatisticsRequest.total_currency:type_name -> analysis.Currency
 	4, // 1: analysis.GetStatisticsResponse.payments_list:type_name -> analysis.PaymentList
 	1, // 2: analysis.PaymentList.payments_type:type_name -> analysis.SubscriptionType
-	7, // 3: analysis.AddPaymentRequest.date:type_name -> google.protobuf.Timestamp
-	1, // 4: analysis.AddPaymentRequest.type:type_name -> analysis.SubscriptionType
-	0, // 5: analysis.AddPaymentRequest.currency:type_name -> analysis.Currency
+	1, // 3: analysis.AddPaymentRequest.type:type_name -> analysis.SubscriptionType
+	0, // 4: analysis.AddPaymentRequest.currency:type_name -> analysis.Currency
+	7, // 5: analysis.AddPaymentRequest.billing_at:type_name -> google.protobuf.Timestamp
 	7, // 6: analysis.AddPaymentResponse.next_billing_at:type_name -> google.protobuf.Timestamp
 	2, // 7: analysis.AnalysisService.GetStatistics:input_type -> analysis.GetStatisticsRequest
 	5, // 8: analysis.AnalysisService.AddPayment:input_type -> analysis.AddPaymentRequest
@@ -534,7 +543,6 @@ func file_proto_analysis_analysis_proto_init() {
 	if File_proto_analysis_analysis_proto != nil {
 		return
 	}
-	file_proto_analysis_analysis_proto_msgTypes[3].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

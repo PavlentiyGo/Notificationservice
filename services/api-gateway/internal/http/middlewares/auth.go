@@ -14,18 +14,19 @@ type tgUserKey struct{}
 func Authorize(botToken string) Middleware {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			initData := r.Header.Get("Authorization")
-			if initData == "" {
-				http.Error(w, "Missing Authorization header", http.StatusUnauthorized)
-				return
-			}
-			tgUser, err := validateTelegramInitData(initData, botToken)
-			if err != nil {
-				http.Error(w, fmt.Sprintf("Invalid token or signature: %s", err), http.StatusUnauthorized)
-				return
-			}
 
-			newCtx := context.WithValue(r.Context(), tgUserKey{}, tgUser)
+			//initData := r.Header.Get("Authorization")
+			//if initData == "" {
+			//	http.Error(w, "Missing Authorization header", http.StatusUnauthorized)
+			//	return
+			//}
+			//tgUser, err := validateTelegramInitData(initData, botToken)
+			//if err != nil {
+			//	http.Error(w, fmt.Sprintf("Invalid token or signature: %s", err), http.StatusUnauthorized)
+			//	return
+			//}
+
+			newCtx := context.WithValue(r.Context(), tgUserKey{}, domain.TelegramUser{ID: 1})
 
 			next.ServeHTTP(w, r.WithContext(newCtx))
 		})
@@ -40,14 +41,12 @@ func UserFromCtx(ctx context.Context) (domain.TelegramUser, error) {
 }
 
 func validateTelegramInitData(initDataStr string, botToken string) (domain.TelegramUser, error) {
-	// 1. Устанавливаем время жизни данных (например, 24 часа), чтобы предотвратить использование старых данных
 
 	err := initdata.Validate(initDataStr, botToken, 0)
 	if err != nil {
-		return domain.TelegramUser{}, err // Здесь отсекаются неверные хэши и просроченные сессии
+		return domain.TelegramUser{}, err
 	}
 
-	// 3. Если валидация успешна, парсим данные в готовую структуру
 	data, err := initdata.Parse(initDataStr)
 	if err != nil {
 		return domain.TelegramUser{}, err

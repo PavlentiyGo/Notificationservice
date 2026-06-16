@@ -42,13 +42,13 @@ func main() {
 
 	if err = serv.Run(
 		ctx,
-		middleware.Recover(),
 		middleware.CORS([]string{
 			"http://localhost:5173",
 			"https://frontsubscriptionreminder.vercel.app/",
 			"https://frontsubscriptionreminder.vercel.app",
 		}),
 		middleware.Trace(),
+		middleware.Recover(),
 	); err != nil {
 		log.Fatal("failed to run server", err)
 	}

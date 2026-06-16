@@ -44,9 +44,9 @@ func (h *SubscriptionHandler) Routes() []server.Route {
 				middleware.Authorize(h.config.BotToken),
 			},
 		}, {
-			Method:  http.MethodPatch, // TODO make
+			Method:  http.MethodPatch,
 			Path:    "/subscriptions",
-			Handler: nil,
+			Handler: h.PatchSubscription,
 			Middlewares: []middleware.Middleware{
 				middleware.Authorize(h.config.BotToken),
 			},
@@ -111,7 +111,7 @@ func (h *SubscriptionHandler) CreateSubscription(
 		responseHandler.GRPCErrorResponse(err)
 		return
 	}
-	dtoResp := CreateSubscriptionResponse{
+	dtoResp := SubscriptionResponse{
 		SubscriptionId: resp.SubscriptionId,
 		Price:          resp.Price,
 		Currency:       resp.Currency.String(),
@@ -146,4 +146,62 @@ func (h *SubscriptionHandler) GetSubscriptions(
 		return
 	}
 	responseHandler.JsonResponse(http.StatusOK, respDto)
+}
+
+func (h *SubscriptionHandler) PatchSubscription(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	responseHandler := http2.NewResponseHandler(w)
+
+	var reqHttp PatchSubscriptionRequest
+
+	if err := request.DecodeAndValidate(r, &reqHttp); err != nil {
+		responseHandler.ErrorResponse(err.Error(), http.StatusBadRequest)
+		return
+	}
+	grpcReq := &subscriptionpb.PatchSubscriptionRequest{
+		SubscriptionId: reqHttp.Id,
+		Price:          reqHttp.Price,
+		Name:           reqHttp.Name,
+		BillingAt:      nil,
+		Type:           nil,
+		Currency:       nil,
+	}
+	if reqHttp.Currency != nil {
+		currency := subscriptionpb.Currency_value[*reqHttp.Currency]
+		currencyGrpc := subscriptionpb.Currency(currency)
+		grpcReq.Currency = &currencyGrpc
+	}
+	if reqHttp.Type != nil {
+		subType := subscriptionpb.SubscriptionType_value[*reqHttp.Type]
+		subTypeGrpc := subscriptionpb.SubscriptionType(subType)
+		grpcReq.Type = &subTypeGrpc
+	}
+	if reqHttp.BillingAt != nil {
+		timeBillingAt, err := time.Parse("2006-01-02", *reqHttp.BillingAt)
+		if err != nil {
+			responseHandler.ErrorResponse("wrong time layout", http.StatusBadRequest)
+			return
+		}
+		grpcReq.BillingAt = timestamppb.New(timeBillingAt)
+	}
+	resp, err := h.subscriptionClient.PatchSubscription(
+		r.Context(),
+		grpcReq,
+	)
+	if err != nil {
+		responseHandler.GRPCErrorResponse(err)
+		return
+	}
+	respHttp := SubscriptionResponse{
+		SubscriptionId: resp.SubscriptionId,
+		Price:          resp.Price,
+		Currency:       resp.Currency.String(),
+		Name:           resp.Name,
+		Type:           resp.Type.String(),
+		BillingAt:      resp.BillingAt.AsTime().Format("2006-01-02"),
+	}
+
+	responseHandler.JsonResponse(http.StatusOK, respHttp)
 }

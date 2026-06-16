@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"time"
 
 	analysispb "github.com/PavlentiyGo/notification-service/proto/analysis"
 	currencypb "github.com/PavlentiyGo/notification-service/proto/currency"
@@ -68,7 +69,12 @@ func (h *AnalysisHandler) AddPayment(
 	ctx context.Context,
 	request *analysispb.AddPaymentRequest,
 ) (*analysispb.AddPaymentResponse, error) {
-	billingAtTime := request.Date.AsTime()
+	var billingAtTime time.Time
+	if request.Date != nil {
+		billingAtTime = request.Date.AsTime()
+	} else {
+		billingAtTime = time.Now()
+	}
 
 	payment, err := h.service.AddPayment(
 		ctx,

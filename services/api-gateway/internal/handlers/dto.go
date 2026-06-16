@@ -6,32 +6,32 @@ import (
 )
 
 type CreateSubscriptionRequest struct {
-	Price     int32  `json:"price" validate:"required,numeric"`
-	Currency  string `json:"currency" validate:"oneof= RUB EUR USD"`
-	Name      string `json:"name" validate:"required,min=3,max=100"`
-	Type      string `json:"type" validate:"oneof= STREAMING SOFTWARE UTILITIES FINANCE HEALTH EDUCATION OTHER"`
-	BillingAt string `json:"billing_at" validate:"required,datetime=2006-01-02"`
+	Price     float64 `json:"price" validate:"required,numeric"`
+	Currency  string  `json:"currency" validate:"oneof= RUB EUR USD"`
+	Name      string  `json:"name" validate:"required,min=3,max=100"`
+	Type      string  `json:"type" validate:"oneof= STREAMING SOFTWARE UTILITIES FINANCE HEALTH EDUCATION OTHER"`
+	BillingAt string  `json:"billing_at" validate:"required,datetime=2006-01-02"`
 }
-type CreateSubscriptionResponse struct {
+type SubscriptionResponse struct {
 	SubscriptionId int32 `json:"subscription_id"`
 
-	Price     int32  `json:"price"`
-	Currency  string `json:"currency"`
-	Name      string `json:"name"`
-	Type      string `json:"type"`
-	BillingAt string `json:"billing_at"`
+	Price     float64 `json:"price"`
+	Currency  string  `json:"currency"`
+	Name      string  `json:"name"`
+	Type      string  `json:"type"`
+	BillingAt string  `json:"billing_at"`
 }
 type GetSubscriptionsResponse struct {
-	Subscriptions []CreateSubscriptionResponse `json:"subscriptions"`
+	Subscriptions []SubscriptionResponse `json:"subscriptions"`
 }
 
 func SubscriptionsDtoFromProto(
 	subscriptions *subscriptionpb.GetSubscriptionsResponse,
-) []CreateSubscriptionResponse {
-	subscDto := make([]CreateSubscriptionResponse, 0, len(subscriptions.Subscriptions))
+) []SubscriptionResponse {
+	subscDto := make([]SubscriptionResponse, 0, len(subscriptions.Subscriptions))
 
 	for _, val := range subscriptions.Subscriptions {
-		dto := CreateSubscriptionResponse{
+		dto := SubscriptionResponse{
 			SubscriptionId: val.SubscriptionId,
 
 			Price:     val.Price,
@@ -81,4 +81,22 @@ func StatisticResponseFromProto(
 	}
 	statisticResponse.Payments = payments
 	return statisticResponse
+}
+
+type AddPaymentRequest struct {
+	Currency string  `json:"currency" validate:"oneof= RUB EUR USD"`
+	Date     *string `json:"date" validate:"omitempty,datetime=2006-01-02"`
+	Name     string  `json:"name" validate:"required,min=3,max=100"`
+	Price    float64 `json:"price" validate:"required,numeric"`
+	Type     string  `json:"type" validate:"oneof= STREAMING SOFTWARE UTILITIES FINANCE HEALTH EDUCATION OTHER"`
+}
+
+type PatchSubscriptionRequest struct {
+	Id int32 `json:"id"`
+
+	Price     *float64 `json:"price"      validate:"omitempty,numeric"`
+	Currency  *string  `json:"currency"   validate:"omitempty,oneof= RUB EUR USD"`
+	Name      *string  `json:"name"       validate:"omitempty,min=3,max=100"`
+	Type      *string  `json:"type"       validate:"omitempty,oneof= STREAMING SOFTWARE UTILITIES FINANCE HEALTH EDUCATION OTHER"`
+	BillingAt *string  `json:"billing_at" validate:"omitempty,datetime=2006-01-02"`
 }

@@ -50,3 +50,23 @@ func (s *SubscriptionService) GetSubscription(
 
 	return subscriptions, nil
 }
+
+func (s *SubscriptionService) PatchSubscription(
+	ctx context.Context,
+	patch domain.SubscriptionPatch,
+) (domain.Subscription, error) {
+
+	subscription, err := s.repo.GetSubscriptionById(ctx, patch.ID)
+	if err != nil {
+		return domain.Subscription{}, fmt.Errorf("failed to get subs id: %w", err)
+	}
+	patchedSubscription, err := patch.Apply(subscription)
+	if err != nil {
+		return domain.Subscription{}, fmt.Errorf("failed to apply patch on subsc: %w", err)
+	}
+	if err = s.repo.PatchSubscription(ctx, patchedSubscription); err != nil {
+		return domain.Subscription{}, fmt.Errorf("failed to patch subscription: %w", err)
+	}
+	return patchedSubscription, nil
+
+}

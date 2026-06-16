@@ -10,7 +10,7 @@ type Subscription struct {
 	SubscriptionId int32
 
 	UserId    int32
-	Price     int32
+	Price     float64
 	Currency  string
 	Name      string
 	Type      string

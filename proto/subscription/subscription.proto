@@ -9,15 +9,13 @@ import "google/protobuf/timestamp.proto";
 service SubscriptionService {
   rpc CreateSubscription(CreateSubscriptionRequest) returns (CreateSubscriptionResponse);
   rpc GetSubscriptions(GetSubscriptionsRequest) returns (GetSubscriptionsResponse);
-  
-
-
+  rpc PatchSubscription(PatchSubscriptionRequest) returns (PathSubscriptionResponse);
 }
 
 message CreateSubscriptionRequest{
   User user = 1;
 
-  int32 price = 2;
+  double price = 2;
   Currency currency = 3;
   string name = 4;
   SubscriptionType type = 5;
@@ -52,7 +50,7 @@ enum SubscriptionType {
 message CreateSubscriptionResponse{
   int32 subscription_id = 1;
 
-  int32 price = 2;
+  double price = 2;
   Currency currency = 3;
   string name = 4;
   SubscriptionType type = 5;
@@ -76,15 +74,20 @@ message DeleteSubscriptionResponse{
 
 
 message PatchSubscriptionRequest{
+  int32 subscription_id = 1;
 
+  optional double price = 2;
+  optional Currency currency = 3;
+  optional string name = 4;
+  optional SubscriptionType type = 5;
+  optional google.protobuf.Timestamp billing_at = 6;
 }
 message PathSubscriptionResponse{
+  int32 subscription_id = 1;
 
-}
-
-message PaySubscriptionRequest{
-
-}
-message PaySubscriptionResponse{
-
+  double price = 2;
+  Currency currency = 3;
+  string name = 4;
+  SubscriptionType type = 5;
+  google.protobuf.Timestamp billing_at = 6;
 }

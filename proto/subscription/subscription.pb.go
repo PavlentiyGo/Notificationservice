@@ -142,7 +142,7 @@ func (SubscriptionType) EnumDescriptor() ([]byte, []int) {
 type CreateSubscriptionRequest struct {
 	state     protoimpl.MessageState `protogen:"open.v1"`
 	User      *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
-	Price     int32                  `protobuf:"varint,2,opt,name=price,proto3" json:"price,omitempty"`
+	Price     float64                `protobuf:"fixed64,2,opt,name=price,proto3" json:"price,omitempty"`
 	Currency  Currency               `protobuf:"varint,3,opt,name=currency,proto3,enum=subscription.Currency" json:"currency,omitempty"`
 	Name      string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 	Type      SubscriptionType       `protobuf:"varint,5,opt,name=type,proto3,enum=subscription.SubscriptionType" json:"type,omitempty"`
@@ -188,7 +188,7 @@ func (x *CreateSubscriptionRequest) GetUser() *User {
 	return nil
 }
 
-func (x *CreateSubscriptionRequest) GetPrice() int32 {
+func (x *CreateSubscriptionRequest) GetPrice() float64 {
 	if x != nil {
 		return x.Price
 	}
@@ -294,7 +294,7 @@ func (x *User) GetSecondName() string {
 type CreateSubscriptionResponse struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	SubscriptionId int32                  `protobuf:"varint,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
-	Price     int32                  `protobuf:"varint,2,opt,name=price,proto3" json:"price,omitempty"`
+	Price     float64                `protobuf:"fixed64,2,opt,name=price,proto3" json:"price,omitempty"`
 	Currency  Currency               `protobuf:"varint,3,opt,name=currency,proto3,enum=subscription.Currency" json:"currency,omitempty"`
 	Name      string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 	Type      SubscriptionType       `protobuf:"varint,5,opt,name=type,proto3,enum=subscription.SubscriptionType" json:"type,omitempty"`
@@ -340,7 +340,7 @@ func (x *CreateSubscriptionResponse) GetSubscriptionId() int32 {
 	return 0
 }
 
-func (x *CreateSubscriptionResponse) GetPrice() int32 {
+func (x *CreateSubscriptionResponse) GetPrice() float64 {
 	if x != nil {
 		return x.Price
 	}
@@ -543,27 +543,32 @@ func (*DeleteSubscriptionResponse) Descriptor() ([]byte, []int) {
 	return file_proto_subscription_subscription_proto_rawDescGZIP(), []int{6}
 }
 
-type ChangeTotalCurrencyRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Currency      Currency               `protobuf:"varint,1,opt,name=currency,proto3,enum=subscription.Currency" json:"currency,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+type PatchSubscriptionRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	SubscriptionId int32                  `protobuf:"varint,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
+	Price          *float64               `protobuf:"fixed64,2,opt,name=price,proto3,oneof" json:"price,omitempty"`
+	Currency       *Currency              `protobuf:"varint,3,opt,name=currency,proto3,enum=subscription.Currency,oneof" json:"currency,omitempty"`
+	Name           *string                `protobuf:"bytes,4,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Type           *SubscriptionType      `protobuf:"varint,5,opt,name=type,proto3,enum=subscription.SubscriptionType,oneof" json:"type,omitempty"`
+	BillingAt      *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=billing_at,json=billingAt,proto3,oneof" json:"billing_at,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
-func (x *ChangeTotalCurrencyRequest) Reset() {
-	*x = ChangeTotalCurrencyRequest{}
+func (x *PatchSubscriptionRequest) Reset() {
+	*x = PatchSubscriptionRequest{}
 	mi := &file_proto_subscription_subscription_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ChangeTotalCurrencyRequest) String() string {
+func (x *PatchSubscriptionRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ChangeTotalCurrencyRequest) ProtoMessage() {}
+func (*PatchSubscriptionRequest) ProtoMessage() {}
 
-func (x *ChangeTotalCurrencyRequest) ProtoReflect() protoreflect.Message {
+func (x *PatchSubscriptionRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_subscription_subscription_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -575,39 +580,79 @@ func (x *ChangeTotalCurrencyRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ChangeTotalCurrencyRequest.ProtoReflect.Descriptor instead.
-func (*ChangeTotalCurrencyRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use PatchSubscriptionRequest.ProtoReflect.Descriptor instead.
+func (*PatchSubscriptionRequest) Descriptor() ([]byte, []int) {
 	return file_proto_subscription_subscription_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *ChangeTotalCurrencyRequest) GetCurrency() Currency {
+func (x *PatchSubscriptionRequest) GetSubscriptionId() int32 {
 	if x != nil {
-		return x.Currency
+		return x.SubscriptionId
+	}
+	return 0
+}
+
+func (x *PatchSubscriptionRequest) GetPrice() float64 {
+	if x != nil && x.Price != nil {
+		return *x.Price
+	}
+	return 0
+}
+
+func (x *PatchSubscriptionRequest) GetCurrency() Currency {
+	if x != nil && x.Currency != nil {
+		return *x.Currency
 	}
 	return Currency_CURRENCY_UNSPECIFIED
 }
 
-type ChangeTotalCurrencyResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Currency      Currency               `protobuf:"varint,1,opt,name=currency,proto3,enum=subscription.Currency" json:"currency,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+func (x *PatchSubscriptionRequest) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
 }
 
-func (x *ChangeTotalCurrencyResponse) Reset() {
-	*x = ChangeTotalCurrencyResponse{}
+func (x *PatchSubscriptionRequest) GetType() SubscriptionType {
+	if x != nil && x.Type != nil {
+		return *x.Type
+	}
+	return SubscriptionType_TYPE_UNSPECIFIED
+}
+
+func (x *PatchSubscriptionRequest) GetBillingAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.BillingAt
+	}
+	return nil
+}
+
+type PathSubscriptionResponse struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	SubscriptionId int32                  `protobuf:"varint,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
+	Price     float64                `protobuf:"fixed64,2,opt,name=price,proto3" json:"price,omitempty"`
+	Currency  Currency               `protobuf:"varint,3,opt,name=currency,proto3,enum=subscription.Currency" json:"currency,omitempty"`
+	Name      string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Type      SubscriptionType       `protobuf:"varint,5,opt,name=type,proto3,enum=subscription.SubscriptionType" json:"type,omitempty"`
+	BillingAt *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=billing_at,json=billingAt,proto3" json:"billing_at,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *PathSubscriptionResponse) Reset() {
+	*x = PathSubscriptionResponse{}
 	mi := &file_proto_subscription_subscription_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ChangeTotalCurrencyResponse) String() string {
+func (x *PathSubscriptionResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ChangeTotalCurrencyResponse) ProtoMessage() {}
+func (*PathSubscriptionResponse) ProtoMessage() {}
 
-func (x *ChangeTotalCurrencyResponse) ProtoReflect() protoreflect.Message {
+func (x *PathSubscriptionResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_subscription_subscription_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -619,128 +664,51 @@ func (x *ChangeTotalCurrencyResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ChangeTotalCurrencyResponse.ProtoReflect.Descriptor instead.
-func (*ChangeTotalCurrencyResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use PathSubscriptionResponse.ProtoReflect.Descriptor instead.
+func (*PathSubscriptionResponse) Descriptor() ([]byte, []int) {
 	return file_proto_subscription_subscription_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *ChangeTotalCurrencyResponse) GetCurrency() Currency {
+func (x *PathSubscriptionResponse) GetSubscriptionId() int32 {
+	if x != nil {
+		return x.SubscriptionId
+	}
+	return 0
+}
+
+func (x *PathSubscriptionResponse) GetPrice() float64 {
+	if x != nil {
+		return x.Price
+	}
+	return 0
+}
+
+func (x *PathSubscriptionResponse) GetCurrency() Currency {
 	if x != nil {
 		return x.Currency
 	}
 	return Currency_CURRENCY_UNSPECIFIED
 }
 
-type GetStatisticRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	TotalCurrency Currency               `protobuf:"varint,1,opt,name=total_currency,json=totalCurrency,proto3,enum=subscription.Currency" json:"total_currency,omitempty"`
-	UserId        int32                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Since         *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=since,proto3" json:"since,omitempty"`
-	To            *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=to,proto3" json:"to,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GetStatisticRequest) Reset() {
-	*x = GetStatisticRequest{}
-	mi := &file_proto_subscription_subscription_proto_msgTypes[9]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GetStatisticRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetStatisticRequest) ProtoMessage() {}
-
-func (x *GetStatisticRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_subscription_subscription_proto_msgTypes[9]
+func (x *PathSubscriptionResponse) GetName() string {
 	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
+		return x.Name
 	}
-	return mi.MessageOf(x)
+	return ""
 }
 
-// Deprecated: Use GetStatisticRequest.ProtoReflect.Descriptor instead.
-func (*GetStatisticRequest) Descriptor() ([]byte, []int) {
-	return file_proto_subscription_subscription_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *GetStatisticRequest) GetTotalCurrency() Currency {
+func (x *PathSubscriptionResponse) GetType() SubscriptionType {
 	if x != nil {
-		return x.TotalCurrency
+		return x.Type
 	}
-	return Currency_CURRENCY_UNSPECIFIED
+	return SubscriptionType_TYPE_UNSPECIFIED
 }
 
-func (x *GetStatisticRequest) GetUserId() int32 {
+func (x *PathSubscriptionResponse) GetBillingAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.UserId
-	}
-	return 0
-}
-
-func (x *GetStatisticRequest) GetSince() *timestamppb.Timestamp {
-	if x != nil {
-		return x.Since
+		return x.BillingAt
 	}
 	return nil
-}
-
-func (x *GetStatisticRequest) GetTo() *timestamppb.Timestamp {
-	if x != nil {
-		return x.To
-	}
-	return nil
-}
-
-type GetStatisticResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Total         int32                  `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GetStatisticResponse) Reset() {
-	*x = GetStatisticResponse{}
-	mi := &file_proto_subscription_subscription_proto_msgTypes[10]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GetStatisticResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetStatisticResponse) ProtoMessage() {}
-
-func (x *GetStatisticResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_subscription_subscription_proto_msgTypes[10]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GetStatisticResponse.ProtoReflect.Descriptor instead.
-func (*GetStatisticResponse) Descriptor() ([]byte, []int) {
-	return file_proto_subscription_subscription_proto_rawDescGZIP(), []int{10}
-}
-
-func (x *GetStatisticResponse) GetTotal() int32 {
-	if x != nil {
-		return x.Total
-	}
-	return 0
 }
 
 var File_proto_subscription_subscription_proto protoreflect.FileDescriptor
@@ -750,7 +718,7 @@ const file_proto_subscription_subscription_proto_rawDesc = "" +
 	"%proto/subscription/subscription.proto\x12\fsubscription\x1a\x1fgoogle/protobuf/timestamp.proto\"\x90\x02\n" +
 	"\x19CreateSubscriptionRequest\x12&\n" +
 	"\x04user\x18\x01 \x01(\v2\x12.subscription.UserR\x04user\x12\x14\n" +
-	"\x05price\x18\x02 \x01(\x05R\x05price\x122\n" +
+	"\x05price\x18\x02 \x01(\x01R\x05price\x122\n" +
 	"\bcurrency\x18\x03 \x01(\x0e2\x16.subscription.CurrencyR\bcurrency\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x122\n" +
 	"\x04type\x18\x05 \x01(\x0e2\x1e.subscription.SubscriptionTypeR\x04type\x129\n" +
@@ -765,7 +733,7 @@ const file_proto_subscription_subscription_proto_rawDesc = "" +
 	"secondName\"\x92\x02\n" +
 	"\x1aCreateSubscriptionResponse\x12'\n" +
 	"\x0fsubscription_id\x18\x01 \x01(\x05R\x0esubscriptionId\x12\x14\n" +
-	"\x05price\x18\x02 \x01(\x05R\x05price\x122\n" +
+	"\x05price\x18\x02 \x01(\x01R\x05price\x122\n" +
 	"\bcurrency\x18\x03 \x01(\x0e2\x16.subscription.CurrencyR\bcurrency\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x122\n" +
 	"\x04type\x18\x05 \x01(\x0e2\x1e.subscription.SubscriptionTypeR\x04type\x129\n" +
@@ -777,18 +745,28 @@ const file_proto_subscription_subscription_proto_rawDesc = "" +
 	"\rsubscriptions\x18\x01 \x03(\v2(.subscription.CreateSubscriptionResponseR\rsubscriptions\"D\n" +
 	"\x19DeleteSubscriptionRequest\x12'\n" +
 	"\x0fsubscription_id\x18\x01 \x01(\x05R\x0esubscriptionId\"\x1c\n" +
-	"\x1aDeleteSubscriptionResponse\"P\n" +
-	"\x1aChangeTotalCurrencyRequest\x122\n" +
-	"\bcurrency\x18\x01 \x01(\x0e2\x16.subscription.CurrencyR\bcurrency\"Q\n" +
-	"\x1bChangeTotalCurrencyResponse\x122\n" +
-	"\bcurrency\x18\x01 \x01(\x0e2\x16.subscription.CurrencyR\bcurrency\"\xcb\x01\n" +
-	"\x13GetStatisticRequest\x12=\n" +
-	"\x0etotal_currency\x18\x01 \x01(\x0e2\x16.subscription.CurrencyR\rtotalCurrency\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\x05R\x06userId\x120\n" +
-	"\x05since\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\x05since\x12*\n" +
-	"\x02to\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\x02to\",\n" +
-	"\x14GetStatisticResponse\x12\x14\n" +
-	"\x05total\x18\x01 \x01(\x05R\x05total*?\n" +
+	"\x1aDeleteSubscriptionResponse\"\xe1\x02\n" +
+	"\x18PatchSubscriptionRequest\x12'\n" +
+	"\x0fsubscription_id\x18\x01 \x01(\x05R\x0esubscriptionId\x12\x19\n" +
+	"\x05price\x18\x02 \x01(\x01H\x00R\x05price\x88\x01\x01\x127\n" +
+	"\bcurrency\x18\x03 \x01(\x0e2\x16.subscription.CurrencyH\x01R\bcurrency\x88\x01\x01\x12\x17\n" +
+	"\x04name\x18\x04 \x01(\tH\x02R\x04name\x88\x01\x01\x127\n" +
+	"\x04type\x18\x05 \x01(\x0e2\x1e.subscription.SubscriptionTypeH\x03R\x04type\x88\x01\x01\x12>\n" +
+	"\n" +
+	"billing_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampH\x04R\tbillingAt\x88\x01\x01B\b\n" +
+	"\x06_priceB\v\n" +
+	"\t_currencyB\a\n" +
+	"\x05_nameB\a\n" +
+	"\x05_typeB\r\n" +
+	"\v_billing_at\"\x90\x02\n" +
+	"\x18PathSubscriptionResponse\x12'\n" +
+	"\x0fsubscription_id\x18\x01 \x01(\x05R\x0esubscriptionId\x12\x14\n" +
+	"\x05price\x18\x02 \x01(\x01R\x05price\x122\n" +
+	"\bcurrency\x18\x03 \x01(\x0e2\x16.subscription.CurrencyR\bcurrency\x12\x12\n" +
+	"\x04name\x18\x04 \x01(\tR\x04name\x122\n" +
+	"\x04type\x18\x05 \x01(\x0e2\x1e.subscription.SubscriptionTypeR\x04type\x129\n" +
+	"\n" +
+	"billing_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tbillingAt*?\n" +
 	"\bCurrency\x12\x18\n" +
 	"\x14CURRENCY_UNSPECIFIED\x10\x00\x12\a\n" +
 	"\x03RUB\x10\x01\x12\a\n" +
@@ -803,10 +781,11 @@ const file_proto_subscription_subscription_proto_rawDesc = "" +
 	"\n" +
 	"\x06HEALTH\x10\x05\x12\r\n" +
 	"\tEDUCATION\x10\x06\x12\t\n" +
-	"\x05OTHER\x10\a2\xe1\x01\n" +
+	"\x05OTHER\x10\a2\xc6\x02\n" +
 	"\x13SubscriptionService\x12g\n" +
 	"\x12CreateSubscription\x12'.subscription.CreateSubscriptionRequest\x1a(.subscription.CreateSubscriptionResponse\x12a\n" +
-	"\x10GetSubscriptions\x12%.subscription.GetSubscriptionsRequest\x1a&.subscription.GetSubscriptionsResponseB@Z>github.com/PavlentiyGo/notification-service/proto/subscriptionb\x06proto3"
+	"\x10GetSubscriptions\x12%.subscription.GetSubscriptionsRequest\x1a&.subscription.GetSubscriptionsResponse\x12c\n" +
+	"\x11PatchSubscription\x12&.subscription.PatchSubscriptionRequest\x1a&.subscription.PathSubscriptionResponseB@Z>github.com/PavlentiyGo/notification-service/proto/subscriptionb\x06proto3"
 
 var (
 	file_proto_subscription_subscription_proto_rawDescOnce sync.Once
@@ -821,46 +800,47 @@ func file_proto_subscription_subscription_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_subscription_subscription_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_proto_subscription_subscription_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_proto_subscription_subscription_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_proto_subscription_subscription_proto_goTypes = []any{
-	(Currency)(0),                       // 0: subscription.Currency
-	(SubscriptionType)(0),               // 1: subscription.SubscriptionType
-	(*CreateSubscriptionRequest)(nil),   // 2: subscription.CreateSubscriptionRequest
-	(*User)(nil),                        // 3: subscription.User
-	(*CreateSubscriptionResponse)(nil),  // 4: subscription.CreateSubscriptionResponse
-	(*GetSubscriptionsRequest)(nil),     // 5: subscription.GetSubscriptionsRequest
-	(*GetSubscriptionsResponse)(nil),    // 6: subscription.GetSubscriptionsResponse
-	(*DeleteSubscriptionRequest)(nil),   // 7: subscription.DeleteSubscriptionRequest
-	(*DeleteSubscriptionResponse)(nil),  // 8: subscription.DeleteSubscriptionResponse
-	(*ChangeTotalCurrencyRequest)(nil),  // 9: subscription.ChangeTotalCurrencyRequest
-	(*ChangeTotalCurrencyResponse)(nil), // 10: subscription.ChangeTotalCurrencyResponse
-	(*GetStatisticRequest)(nil),         // 11: subscription.GetStatisticRequest
-	(*GetStatisticResponse)(nil),        // 12: subscription.GetStatisticResponse
-	(*timestamppb.Timestamp)(nil),       // 13: google.protobuf.Timestamp
+	(Currency)(0),                      // 0: subscription.Currency
+	(SubscriptionType)(0),              // 1: subscription.SubscriptionType
+	(*CreateSubscriptionRequest)(nil),  // 2: subscription.CreateSubscriptionRequest
+	(*User)(nil),                       // 3: subscription.User
+	(*CreateSubscriptionResponse)(nil), // 4: subscription.CreateSubscriptionResponse
+	(*GetSubscriptionsRequest)(nil),    // 5: subscription.GetSubscriptionsRequest
+	(*GetSubscriptionsResponse)(nil),   // 6: subscription.GetSubscriptionsResponse
+	(*DeleteSubscriptionRequest)(nil),  // 7: subscription.DeleteSubscriptionRequest
+	(*DeleteSubscriptionResponse)(nil), // 8: subscription.DeleteSubscriptionResponse
+	(*PatchSubscriptionRequest)(nil),   // 9: subscription.PatchSubscriptionRequest
+	(*PathSubscriptionResponse)(nil),   // 10: subscription.PathSubscriptionResponse
+	(*timestamppb.Timestamp)(nil),      // 11: google.protobuf.Timestamp
 }
 var file_proto_subscription_subscription_proto_depIdxs = []int32{
 	3,  // 0: subscription.CreateSubscriptionRequest.user:type_name -> subscription.User
 	0,  // 1: subscription.CreateSubscriptionRequest.currency:type_name -> subscription.Currency
 	1,  // 2: subscription.CreateSubscriptionRequest.type:type_name -> subscription.SubscriptionType
-	13, // 3: subscription.CreateSubscriptionRequest.billing_at:type_name -> google.protobuf.Timestamp
+	11, // 3: subscription.CreateSubscriptionRequest.billing_at:type_name -> google.protobuf.Timestamp
 	0,  // 4: subscription.CreateSubscriptionResponse.currency:type_name -> subscription.Currency
 	1,  // 5: subscription.CreateSubscriptionResponse.type:type_name -> subscription.SubscriptionType
-	13, // 6: subscription.CreateSubscriptionResponse.billing_at:type_name -> google.protobuf.Timestamp
+	11, // 6: subscription.CreateSubscriptionResponse.billing_at:type_name -> google.protobuf.Timestamp
 	4,  // 7: subscription.GetSubscriptionsResponse.subscriptions:type_name -> subscription.CreateSubscriptionResponse
-	0,  // 8: subscription.ChangeTotalCurrencyRequest.currency:type_name -> subscription.Currency
-	0,  // 9: subscription.ChangeTotalCurrencyResponse.currency:type_name -> subscription.Currency
-	0,  // 10: subscription.GetStatisticRequest.total_currency:type_name -> subscription.Currency
-	13, // 11: subscription.GetStatisticRequest.since:type_name -> google.protobuf.Timestamp
-	13, // 12: subscription.GetStatisticRequest.to:type_name -> google.protobuf.Timestamp
-	2,  // 13: subscription.SubscriptionService.CreateSubscription:input_type -> subscription.CreateSubscriptionRequest
-	5,  // 14: subscription.SubscriptionService.GetSubscriptions:input_type -> subscription.GetSubscriptionsRequest
-	4,  // 15: subscription.SubscriptionService.CreateSubscription:output_type -> subscription.CreateSubscriptionResponse
-	6,  // 16: subscription.SubscriptionService.GetSubscriptions:output_type -> subscription.GetSubscriptionsResponse
-	15, // [15:17] is the sub-list for method output_type
-	13, // [13:15] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	0,  // 8: subscription.PatchSubscriptionRequest.currency:type_name -> subscription.Currency
+	1,  // 9: subscription.PatchSubscriptionRequest.type:type_name -> subscription.SubscriptionType
+	11, // 10: subscription.PatchSubscriptionRequest.billing_at:type_name -> google.protobuf.Timestamp
+	0,  // 11: subscription.PathSubscriptionResponse.currency:type_name -> subscription.Currency
+	1,  // 12: subscription.PathSubscriptionResponse.type:type_name -> subscription.SubscriptionType
+	11, // 13: subscription.PathSubscriptionResponse.billing_at:type_name -> google.protobuf.Timestamp
+	2,  // 14: subscription.SubscriptionService.CreateSubscription:input_type -> subscription.CreateSubscriptionRequest
+	5,  // 15: subscription.SubscriptionService.GetSubscriptions:input_type -> subscription.GetSubscriptionsRequest
+	9,  // 16: subscription.SubscriptionService.PatchSubscription:input_type -> subscription.PatchSubscriptionRequest
+	4,  // 17: subscription.SubscriptionService.CreateSubscription:output_type -> subscription.CreateSubscriptionResponse
+	6,  // 18: subscription.SubscriptionService.GetSubscriptions:output_type -> subscription.GetSubscriptionsResponse
+	10, // 19: subscription.SubscriptionService.PatchSubscription:output_type -> subscription.PathSubscriptionResponse
+	17, // [17:20] is the sub-list for method output_type
+	14, // [14:17] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_proto_subscription_subscription_proto_init() }
@@ -868,13 +848,14 @@ func file_proto_subscription_subscription_proto_init() {
 	if File_proto_subscription_subscription_proto != nil {
 		return
 	}
+	file_proto_subscription_subscription_proto_msgTypes[7].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_subscription_subscription_proto_rawDesc), len(file_proto_subscription_subscription_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   11,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

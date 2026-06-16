@@ -51,8 +51,8 @@ enum SubscriptionType {
 
 message AddPaymentRequest{
   int32 user_id = 1;
-  optional google.protobuf.Timestamp date = 2;
-
+  int32 subscription_id = 2;
+  
   SubscriptionType type = 3;
   string name = 4;
   Currency currency = 5;

@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	SubscriptionService_CreateSubscription_FullMethodName = "/subscription.SubscriptionService/CreateSubscription"
 	SubscriptionService_GetSubscriptions_FullMethodName   = "/subscription.SubscriptionService/GetSubscriptions"
+	SubscriptionService_PatchSubscription_FullMethodName  = "/subscription.SubscriptionService/PatchSubscription"
 )
 
 // SubscriptionServiceClient is the client API for SubscriptionService service.
@@ -30,6 +31,7 @@ const (
 type SubscriptionServiceClient interface {
 	CreateSubscription(ctx context.Context, in *CreateSubscriptionRequest, opts ...grpc.CallOption) (*CreateSubscriptionResponse, error)
 	GetSubscriptions(ctx context.Context, in *GetSubscriptionsRequest, opts ...grpc.CallOption) (*GetSubscriptionsResponse, error)
+	PatchSubscription(ctx context.Context, in *PatchSubscriptionRequest, opts ...grpc.CallOption) (*PathSubscriptionResponse, error)
 }
 
 type subscriptionServiceClient struct {
@@ -60,12 +62,23 @@ func (c *subscriptionServiceClient) GetSubscriptions(ctx context.Context, in *Ge
 	return out, nil
 }
 
+func (c *subscriptionServiceClient) PatchSubscription(ctx context.Context, in *PatchSubscriptionRequest, opts ...grpc.CallOption) (*PathSubscriptionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PathSubscriptionResponse)
+	err := c.cc.Invoke(ctx, SubscriptionService_PatchSubscription_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SubscriptionServiceServer is the server API for SubscriptionService service.
 // All implementations must embed UnimplementedSubscriptionServiceServer
 // for forward compatibility.
 type SubscriptionServiceServer interface {
 	CreateSubscription(context.Context, *CreateSubscriptionRequest) (*CreateSubscriptionResponse, error)
 	GetSubscriptions(context.Context, *GetSubscriptionsRequest) (*GetSubscriptionsResponse, error)
+	PatchSubscription(context.Context, *PatchSubscriptionRequest) (*PathSubscriptionResponse, error)
 	mustEmbedUnimplementedSubscriptionServiceServer()
 }
 
@@ -81,6 +94,9 @@ func (UnimplementedSubscriptionServiceServer) CreateSubscription(context.Context
 }
 func (UnimplementedSubscriptionServiceServer) GetSubscriptions(context.Context, *GetSubscriptionsRequest) (*GetSubscriptionsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetSubscriptions not implemented")
+}
+func (UnimplementedSubscriptionServiceServer) PatchSubscription(context.Context, *PatchSubscriptionRequest) (*PathSubscriptionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method PatchSubscription not implemented")
 }
 func (UnimplementedSubscriptionServiceServer) mustEmbedUnimplementedSubscriptionServiceServer() {}
 func (UnimplementedSubscriptionServiceServer) testEmbeddedByValue()                             {}
@@ -139,6 +155,24 @@ func _SubscriptionService_GetSubscriptions_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SubscriptionService_PatchSubscription_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PatchSubscriptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubscriptionServiceServer).PatchSubscription(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SubscriptionService_PatchSubscription_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubscriptionServiceServer).PatchSubscription(ctx, req.(*PatchSubscriptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SubscriptionService_ServiceDesc is the grpc.ServiceDesc for SubscriptionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -153,6 +187,10 @@ var SubscriptionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetSubscriptions",
 			Handler:    _SubscriptionService_GetSubscriptions_Handler,
+		},
+		{
+			MethodName: "PatchSubscription",
+			Handler:    _SubscriptionService_PatchSubscription_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -8,9 +8,10 @@ import (
 )
 
 type Config struct {
-	QueryTimeout time.Duration `envconfig:"DB_QUERY_TIMEOUT" default:"5s"`
-	CurrencyAddr string        `envconfig:"CURRENCY_ADDR" required:"true"`
-	AnalysisAddr string        `envconfig:"ANALYSIS_ADDR" required:"true"`
+	QueryTimeout     time.Duration `envconfig:"DB_QUERY_TIMEOUT" default:"5s"`
+	CurrencyAddr     string        `envconfig:"CURRENCY_ADDR" required:"true"`
+	AnalysisAddr     string        `envconfig:"ANALYSIS_ADDR" required:"true"`
+	SubscriptionAddr string        `envconfig:"SUBSCRIPTION_ADDR" required:"true"`
 
 	DbUser     string `envconfig:"POSTGRES_USER"     required:"true"`
 	DbPassword string `envconfig:"POSTGRES_PASSWORD" required:"true"`

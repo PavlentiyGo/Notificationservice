@@ -142,7 +142,7 @@ func (SubscriptionType) EnumDescriptor() ([]byte, []int) {
 type GetStatisticsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TotalCurrency Currency               `protobuf:"varint,1,opt,name=total_currency,json=totalCurrency,proto3,enum=analysis.Currency" json:"total_currency,omitempty"`
-	UserId        int32                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        int64                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	ThisMonth     bool                   `protobuf:"varint,3,opt,name=this_month,json=thisMonth,proto3" json:"this_month,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -185,7 +185,7 @@ func (x *GetStatisticsRequest) GetTotalCurrency() Currency {
 	return Currency_CURRENCY_UNSPECIFIED
 }
 
-func (x *GetStatisticsRequest) GetUserId() int32 {
+func (x *GetStatisticsRequest) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
@@ -313,7 +313,7 @@ func (x *PaymentList) GetSubscriptionsName() []string {
 
 type AddPaymentRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	UserId         int32                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId         int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	SubscriptionId int32            `protobuf:"varint,2,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
 	Type           SubscriptionType `protobuf:"varint,3,opt,name=type,proto3,enum=analysis.SubscriptionType" json:"type,omitempty"`
 	Name           string           `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
@@ -354,7 +354,7 @@ func (*AddPaymentRequest) Descriptor() ([]byte, []int) {
 	return file_proto_analysis_analysis_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *AddPaymentRequest) GetUserId() int32 {
+func (x *AddPaymentRequest) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
@@ -454,7 +454,7 @@ const file_proto_analysis_analysis_proto_rawDesc = "" +
 	"\x1dproto/analysis/analysis.proto\x12\banalysis\x1a\x1fgoogle/protobuf/timestamp.proto\"\x89\x01\n" +
 	"\x14GetStatisticsRequest\x129\n" +
 	"\x0etotal_currency\x18\x01 \x01(\x0e2\x12.analysis.CurrencyR\rtotalCurrency\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\x05R\x06userId\x12\x1d\n" +
+	"\auser_id\x18\x02 \x01(\x03R\x06userId\x12\x1d\n" +
 	"\n" +
 	"this_month\x18\x03 \x01(\bR\tthisMonth\"p\n" +
 	"\x15GetStatisticsResponse\x12\x1b\n" +
@@ -465,7 +465,7 @@ const file_proto_analysis_analysis_proto_rawDesc = "" +
 	"\ttotal_sum\x18\x02 \x01(\tR\btotalSum\x12-\n" +
 	"\x12subscriptions_name\x18\x03 \x03(\tR\x11subscriptionsName\"\x9a\x02\n" +
 	"\x11AddPaymentRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x05R\x06userId\x12'\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12'\n" +
 	"\x0fsubscription_id\x18\x02 \x01(\x05R\x0esubscriptionId\x12.\n" +
 	"\x04type\x18\x03 \x01(\x0e2\x1a.analysis.SubscriptionTypeR\x04type\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x12.\n" +

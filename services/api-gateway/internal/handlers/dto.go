@@ -84,11 +84,12 @@ func StatisticResponseFromProto(
 }
 
 type AddPaymentRequest struct {
-	Currency string  `json:"currency" validate:"oneof= RUB EUR USD"`
-	Date     *string `json:"date" validate:"omitempty,datetime=2006-01-02"`
-	Name     string  `json:"name" validate:"required,min=3,max=100"`
-	Price    float64 `json:"price" validate:"required,numeric"`
-	Type     string  `json:"type" validate:"oneof= STREAMING SOFTWARE UTILITIES FINANCE HEALTH EDUCATION OTHER"`
+	SubscriptionId int32   `json:"subscription_id" validate:"required,numeric"`
+	Currency       string  `json:"currency" validate:"oneof= RUB EUR USD"`
+	BillingAt      string  `json:"billing_at" validate:"omitempty,datetime=2006-01-02"`
+	Name           string  `json:"name" validate:"required,min=3,max=100"`
+	Price          float64 `json:"price" validate:"required,numeric"`
+	Type           string  `json:"type" validate:"oneof= STREAMING SOFTWARE UTILITIES FINANCE HEALTH EDUCATION OTHER"`
 }
 
 type PatchSubscriptionRequest struct {

@@ -32,8 +32,14 @@ func main() {
 		return
 	}
 	defer currencyConn.Close()
+	subscriptionConn, err := grpc.NewClient(cfg.SubscriptionAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Println("failed to create subscription client ", err.Error())
+		return
+	}
+	defer currencyConn.Close()
 
-	analysisHandler := handler.NewAnalysisHandler(currencyConn, analysisService)
+	analysisHandler := handler.NewAnalysisHandler(currencyConn, subscriptionConn, analysisService)
 
 	serv := grpc.NewServer()
 	analysispb.RegisterAnalysisServiceServer(serv, analysisHandler)

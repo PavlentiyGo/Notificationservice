@@ -83,21 +83,19 @@ func (h *AnalysisHandler) AddPayment(
 
 	subType := analysispb.SubscriptionType_value[requestHTTP.Type]
 	subCurrency := analysispb.Currency_value[requestHTTP.Currency]
-
-	addPaymentRequest := &analysispb.AddPaymentRequest{
-		UserId:   user.ID,
-		Type:     analysispb.SubscriptionType(subType),
-		Name:     requestHTTP.Name,
-		Currency: analysispb.Currency(subCurrency),
-		Price:    requestHTTP.Price,
+	billingAtTime, err := time.Parse("2006-01-2", requestHTTP.BillingAt)
+	if err != nil {
+		responseHandler.ErrorResponse(err.Error(), http.StatusBadRequest)
+		return
 	}
-	if requestHTTP.Date != nil {
-		billingTime, err := time.Parse("2006-01-02", *requestHTTP.Date)
-		if err != nil {
-			responseHandler.ErrorResponse(err.Error(), http.StatusInternalServerError)
-			return
-		}
-		addPaymentRequest.Date = timestamppb.New(billingTime)
+	addPaymentRequest := &analysispb.AddPaymentRequest{
+		UserId:         user.ID,
+		SubscriptionId: requestHTTP.SubscriptionId,
+		BillingAt:      timestamppb.New(billingAtTime),
+		Type:           analysispb.SubscriptionType(subType),
+		Name:           requestHTTP.Name,
+		Currency:       analysispb.Currency(subCurrency),
+		Price:          requestHTTP.Price,
 	}
 	respGRPC, err := h.analysisClient.AddPayment(
 		r.Context(),
@@ -108,13 +106,15 @@ func (h *AnalysisHandler) AddPayment(
 		return
 	}
 	respHTTP := struct {
-		BillingAt string `json:"billing_at"`
+		BillingAt string `json:"next_billing_at"`
 	}{
 		BillingAt: respGRPC.NextBillingAt.AsTime().Format("2006-01-02"),
 	}
 	responseHandler.JsonResponse(http.StatusOK, respHTTP)
 
 }
+
+// 998998854
 
 func (h *AnalysisHandler) Routes() []server.Route {
 	return []server.Route{

@@ -225,7 +225,7 @@ func (x *CreateSubscriptionRequest) GetBillingAt() *timestamppb.Timestamp {
 
 type User struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	UserName      string                 `protobuf:"bytes,2,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"`
 	FirstName     string                 `protobuf:"bytes,3,opt,name=first_name,json=firstName,proto3" json:"first_name,omitempty"`
 	SecondName    string                 `protobuf:"bytes,4,opt,name=second_name,json=secondName,proto3" json:"second_name,omitempty"`
@@ -263,7 +263,7 @@ func (*User) Descriptor() ([]byte, []int) {
 	return file_proto_subscription_subscription_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *User) GetId() int32 {
+func (x *User) GetId() int64 {
 	if x != nil {
 		return x.Id
 	}
@@ -377,7 +377,7 @@ func (x *CreateSubscriptionResponse) GetBillingAt() *timestamppb.Timestamp {
 
 type GetSubscriptionsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        int32                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -412,7 +412,7 @@ func (*GetSubscriptionsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_subscription_subscription_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GetSubscriptionsRequest) GetUserId() int32 {
+func (x *GetSubscriptionsRequest) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
@@ -725,7 +725,7 @@ const file_proto_subscription_subscription_proto_rawDesc = "" +
 	"\n" +
 	"billing_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tbillingAt\"s\n" +
 	"\x04User\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x1b\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1b\n" +
 	"\tuser_name\x18\x02 \x01(\tR\buserName\x12\x1d\n" +
 	"\n" +
 	"first_name\x18\x03 \x01(\tR\tfirstName\x12\x1f\n" +
@@ -740,7 +740,7 @@ const file_proto_subscription_subscription_proto_rawDesc = "" +
 	"\n" +
 	"billing_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tbillingAt\"2\n" +
 	"\x17GetSubscriptionsRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x05R\x06userId\"j\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\"j\n" +
 	"\x18GetSubscriptionsResponse\x12N\n" +
 	"\rsubscriptions\x18\x01 \x03(\v2(.subscription.CreateSubscriptionResponseR\rsubscriptions\"D\n" +
 	"\x19DeleteSubscriptionRequest\x12'\n" +

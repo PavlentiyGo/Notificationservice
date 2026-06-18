@@ -2,10 +2,10 @@ package handler
 
 import (
 	"context"
-	"time"
 
 	analysispb "github.com/PavlentiyGo/notification-service/proto/analysis"
 	currencypb "github.com/PavlentiyGo/notification-service/proto/currency"
+	subscriptionpb "github.com/PavlentiyGo/notification-service/proto/subscription"
 	"github.com/PavlentiyGo/notification-service/services/analysis/internal/domain"
 	"github.com/PavlentiyGo/notification-service/services/analysis/internal/service"
 	"google.golang.org/grpc"
@@ -15,18 +15,21 @@ import (
 )
 
 type AnalysisHandler struct {
-	currencyClient currencypb.CurrencyServiceClient
-	service        *service.AnalysisService
+	currencyClient     currencypb.CurrencyServiceClient
+	subscriptionClient subscriptionpb.SubscriptionServiceClient
+	service            *service.AnalysisService
 	analysispb.UnimplementedAnalysisServiceServer
 }
 
 func NewAnalysisHandler(
 	conn *grpc.ClientConn,
+	conn2 *grpc.ClientConn,
 	service *service.AnalysisService,
 ) *AnalysisHandler {
 	return &AnalysisHandler{
-		currencyClient: currencypb.NewCurrencyServiceClient(conn),
-		service:        service,
+		currencyClient:     currencypb.NewCurrencyServiceClient(conn),
+		subscriptionClient: subscriptionpb.NewSubscriptionServiceClient(conn2),
+		service:            service,
 	}
 }
 
@@ -69,14 +72,9 @@ func (h *AnalysisHandler) AddPayment(
 	ctx context.Context,
 	request *analysispb.AddPaymentRequest,
 ) (*analysispb.AddPaymentResponse, error) {
-	var billingAtTime time.Time
-	if request.Date != nil {
-		billingAtTime = request.Date.AsTime()
-	} else {
-		billingAtTime = time.Now()
-	}
 
-	payment, err := h.service.AddPayment(
+	billingAtTime := request.BillingAt.AsTime()
+	nextBillingAt, err := h.service.AddPayment(
 		ctx,
 		domain.Payment{
 			BillingAt:            &billingAtTime,
@@ -90,8 +88,20 @@ func (h *AnalysisHandler) AddPayment(
 	if err != nil {
 		return nil, status.Error(codes.Internal, "internal error")
 	}
+
+	_, err = h.subscriptionClient.PatchSubscription(
+		ctx,
+		&subscriptionpb.PatchSubscriptionRequest{
+			SubscriptionId: request.SubscriptionId,
+			BillingAt:      timestamppb.New(nextBillingAt),
+		},
+	)
+	if err != nil {
+		return nil, status.Error(codes.Internal, "failed to perform patch"+err.Error())
+	}
+
 	resp := &analysispb.AddPaymentResponse{
-		NextBillingAt: timestamppb.New(*payment.BillingAt),
+		NextBillingAt: timestamppb.New(nextBillingAt),
 	}
 
 	return resp, nil

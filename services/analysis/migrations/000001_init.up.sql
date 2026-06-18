@@ -6,7 +6,7 @@ CREATE TYPE currency AS ENUM ('RUB','USD','EUR');
 CREATE TABLE payments(
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,
-    date TIMESTAMP WITH TIME ZONE,
+    date TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW(),
     subscription_name TEXT NOT NULL,
     subscription_type subscription_type,
     subscription_currency currency,

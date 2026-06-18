@@ -12,7 +12,7 @@ service AnalysisService{
 
 message GetStatisticsRequest{
   Currency total_currency = 1;
-  int32 user_id = 2;
+  int64 user_id = 2;
 
   bool this_month = 3;
 }
@@ -50,7 +50,7 @@ enum SubscriptionType {
 }
 
 message AddPaymentRequest{
-  int32 user_id = 1;
+  int64 user_id = 1;
   int32 subscription_id = 2;
 
   SubscriptionType type = 3;

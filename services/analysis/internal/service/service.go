@@ -91,21 +91,18 @@ func (s *AnalysisService) AddPayment(
 	ctx context.Context,
 	payment domain.Payment,
 	userId int32,
-) (domain.Payment, error) {
+) (time.Time, error) {
 
-	if payment.BillingAt == nil {
-		nextBillingAt := time.Now().AddDate(0, 1, 0)
-		payment.BillingAt = &nextBillingAt
-	} else {
-		nextBillingAt := payment.BillingAt.AddDate(0, 1, 0)
-		payment.BillingAt = &nextBillingAt
-	}
+	nextBillingAt := payment.BillingAt.AddDate(0, 1, 0)
+	payedAt := time.Now()
+
+	payment.BillingAt = &payedAt
 	if err := s.repository.AddPayment(
 		ctx,
 		payment,
 		userId,
 	); err != nil {
-		return domain.Payment{}, err
+		return time.Time{}, err
 	}
-	return payment, nil
+	return nextBillingAt, nil
 }

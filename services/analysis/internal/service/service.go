@@ -21,7 +21,7 @@ func NewAnalysisService(repo *repository.AnalysisRepository) *AnalysisService {
 
 func (s *AnalysisService) GetStatistics(
 	ctx context.Context,
-	userId int32,
+	userId int64,
 	thisMonth bool,
 ) ([]domain.Payment, error) {
 	return s.repository.GetStatistics(ctx, userId, thisMonth)
@@ -90,7 +90,7 @@ func convertCurrency(from, to string, currency domain.Currency, price float64) f
 func (s *AnalysisService) AddPayment(
 	ctx context.Context,
 	payment domain.Payment,
-	userId int32,
+	userId int64,
 ) (time.Time, error) {
 
 	nextBillingAt := payment.BillingAt.AddDate(0, 1, 0)

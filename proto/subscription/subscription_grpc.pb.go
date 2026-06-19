@@ -8,7 +8,6 @@ package subscription
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -20,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SubscriptionService_CreateSubscription_FullMethodName = "/subscription.SubscriptionService/CreateSubscription"
-	SubscriptionService_GetSubscriptions_FullMethodName   = "/subscription.SubscriptionService/GetSubscriptions"
-	SubscriptionService_PatchSubscription_FullMethodName  = "/subscription.SubscriptionService/PatchSubscription"
+	SubscriptionService_CreateSubscription_FullMethodName  = "/subscription.SubscriptionService/CreateSubscription"
+	SubscriptionService_GetSubscriptions_FullMethodName    = "/subscription.SubscriptionService/GetSubscriptions"
+	SubscriptionService_PatchSubscription_FullMethodName   = "/subscription.SubscriptionService/PatchSubscription"
+	SubscriptionService_GetAllSubscriptions_FullMethodName = "/subscription.SubscriptionService/GetAllSubscriptions"
 )
 
 // SubscriptionServiceClient is the client API for SubscriptionService service.
@@ -32,6 +32,7 @@ type SubscriptionServiceClient interface {
 	CreateSubscription(ctx context.Context, in *CreateSubscriptionRequest, opts ...grpc.CallOption) (*CreateSubscriptionResponse, error)
 	GetSubscriptions(ctx context.Context, in *GetSubscriptionsRequest, opts ...grpc.CallOption) (*GetSubscriptionsResponse, error)
 	PatchSubscription(ctx context.Context, in *PatchSubscriptionRequest, opts ...grpc.CallOption) (*PathSubscriptionResponse, error)
+	GetAllSubscriptions(ctx context.Context, in *GetAllSubscriptionsRequest, opts ...grpc.CallOption) (*GetAllSubscriptionsResponse, error)
 }
 
 type subscriptionServiceClient struct {
@@ -72,6 +73,16 @@ func (c *subscriptionServiceClient) PatchSubscription(ctx context.Context, in *P
 	return out, nil
 }
 
+func (c *subscriptionServiceClient) GetAllSubscriptions(ctx context.Context, in *GetAllSubscriptionsRequest, opts ...grpc.CallOption) (*GetAllSubscriptionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetAllSubscriptionsResponse)
+	err := c.cc.Invoke(ctx, SubscriptionService_GetAllSubscriptions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SubscriptionServiceServer is the server API for SubscriptionService service.
 // All implementations must embed UnimplementedSubscriptionServiceServer
 // for forward compatibility.
@@ -79,6 +90,7 @@ type SubscriptionServiceServer interface {
 	CreateSubscription(context.Context, *CreateSubscriptionRequest) (*CreateSubscriptionResponse, error)
 	GetSubscriptions(context.Context, *GetSubscriptionsRequest) (*GetSubscriptionsResponse, error)
 	PatchSubscription(context.Context, *PatchSubscriptionRequest) (*PathSubscriptionResponse, error)
+	GetAllSubscriptions(context.Context, *GetAllSubscriptionsRequest) (*GetAllSubscriptionsResponse, error)
 	mustEmbedUnimplementedSubscriptionServiceServer()
 }
 
@@ -97,6 +109,9 @@ func (UnimplementedSubscriptionServiceServer) GetSubscriptions(context.Context, 
 }
 func (UnimplementedSubscriptionServiceServer) PatchSubscription(context.Context, *PatchSubscriptionRequest) (*PathSubscriptionResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method PatchSubscription not implemented")
+}
+func (UnimplementedSubscriptionServiceServer) GetAllSubscriptions(context.Context, *GetAllSubscriptionsRequest) (*GetAllSubscriptionsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetAllSubscriptions not implemented")
 }
 func (UnimplementedSubscriptionServiceServer) mustEmbedUnimplementedSubscriptionServiceServer() {}
 func (UnimplementedSubscriptionServiceServer) testEmbeddedByValue()                             {}
@@ -173,6 +188,24 @@ func _SubscriptionService_PatchSubscription_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SubscriptionService_GetAllSubscriptions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllSubscriptionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubscriptionServiceServer).GetAllSubscriptions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SubscriptionService_GetAllSubscriptions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubscriptionServiceServer).GetAllSubscriptions(ctx, req.(*GetAllSubscriptionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SubscriptionService_ServiceDesc is the grpc.ServiceDesc for SubscriptionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -191,6 +224,10 @@ var SubscriptionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PatchSubscription",
 			Handler:    _SubscriptionService_PatchSubscription_Handler,
+		},
+		{
+			MethodName: "GetAllSubscriptions",
+			Handler:    _SubscriptionService_GetAllSubscriptions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

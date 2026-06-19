@@ -10,6 +10,8 @@ service SubscriptionService {
   rpc CreateSubscription(CreateSubscriptionRequest) returns (CreateSubscriptionResponse);
   rpc GetSubscriptions(GetSubscriptionsRequest) returns (GetSubscriptionsResponse);
   rpc PatchSubscription(PatchSubscriptionRequest) returns (PathSubscriptionResponse);
+
+  rpc GetAllSubscriptions(GetAllSubscriptionsRequest) returns (GetAllSubscriptionsResponse);
 }
 
 message CreateSubscriptionRequest{
@@ -91,3 +93,11 @@ message PathSubscriptionResponse{
   SubscriptionType type = 5;
   google.protobuf.Timestamp billing_at = 6;
 }
+
+message GetAllSubscriptionsRequest{
+}
+
+message GetAllSubscriptionsResponse{
+  repeated CreateSubscriptionRequest subscriptions = 1;
+}
+

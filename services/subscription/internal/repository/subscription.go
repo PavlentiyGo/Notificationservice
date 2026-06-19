@@ -95,7 +95,7 @@ func (r *SubscriptionRepository) CreateSubscriptions(
 
 func (r *SubscriptionRepository) GetSubscriptions(
 	ctx context.Context,
-	userId int32,
+	userId int64,
 ) ([]domain.Subscription, error) {
 
 	ctx, cancel := context.WithTimeout(ctx, r.config.QueryTimeout)

@@ -40,7 +40,7 @@ func (s *SubscriptionService) CreateSubscription(
 }
 func (s *SubscriptionService) GetSubscription(
 	ctx context.Context,
-	userId int32,
+	userId int64,
 ) ([]domain.Subscription, error) {
 
 	subscriptions, err := s.repo.GetSubscriptions(ctx, userId)

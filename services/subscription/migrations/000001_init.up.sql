@@ -1,5 +1,5 @@
 CREATE TABLE users(
-    id INTEGER PRIMARY KEY,
+    id BIGINT PRIMARY KEY,
     user_name TEXT NOT NULL,
     first_name TEXT NOT NULL,
     second_name TEXT NOT NULL
@@ -7,7 +7,7 @@ CREATE TABLE users(
 
 CREATE TABLE subscriptions(
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
+    user_id BIGINT REFERENCES users(id),
     price DECIMAL CHECK ( price > 0 ) NOT NULL,
     currency TEXT CHECK ( currency IN ('RUB','USD','EUR')),
     name TEXT NOT NULL,

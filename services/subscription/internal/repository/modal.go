@@ -9,7 +9,7 @@ import (
 type Subscription struct {
 	SubscriptionId int32
 
-	UserId    int32
+	UserId    int64
 	Price     float64
 	Currency  string
 	Name      string

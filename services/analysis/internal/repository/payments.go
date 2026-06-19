@@ -23,7 +23,7 @@ func NewAnalysisRepository(pool *pgxpool.Pool, cfg config.Config) *AnalysisRepos
 
 func (r *AnalysisRepository) GetStatistics(
 	ctx context.Context,
-	userId int32,
+	userId int64,
 	thisMonth bool,
 ) ([]domain.Payment, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.config.QueryTimeout)
@@ -75,7 +75,7 @@ func (r *AnalysisRepository) GetStatistics(
 func (r *AnalysisRepository) AddPayment(
 	ctx context.Context,
 	payment domain.Payment,
-	userId int32,
+	userId int64,
 ) error {
 	ctx, cancel := context.WithTimeout(ctx, r.config.QueryTimeout)
 	defer cancel()

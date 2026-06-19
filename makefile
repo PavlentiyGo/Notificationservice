@@ -3,6 +3,12 @@ export
 
 export PROJECT_ROOT = ${shell pwd}
 
+subscription-worker-up:
+	go run services/subscription-worker/cmd/main.go
+
+notification-up:
+	go run services/notification/cmd/main.go
+
 analysis-up:
 	go run services/analysis/cmd/main.go
 
